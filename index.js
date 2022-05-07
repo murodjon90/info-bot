@@ -50,6 +50,10 @@ bot.action("btn_ru_0", async (ctx) => {
           ],
           [
             { text: "🏠 Главная страница", callback_data: "btn_ru_3" },
+            {text: "⚖️❗️ Сообщение о случаях коррупции", callback_data: "btn_ru_cur"}
+          ],
+          [
+            
             { text: "⬅️ Назад", callback_data: "btn_ru_4" },
           ],
         ],
@@ -68,7 +72,7 @@ bot.action("btn_us_0", async (ctx) => {
         inline_keyboard: [
           [
             { text: "📰 Yangiliklar", callback_data: "btn_uz_1-1" },
-            { text: "💵 Valyuta kurslari", url: "https://cbu.uz" },
+            { text: "💵 Valyutalar kursi", url: "https://cbu.uz" },
           ],
           [
             { text: "📍🗺 Manzillar", callback_data: "btn_uz_1" },
@@ -81,9 +85,12 @@ bot.action("btn_us_0", async (ctx) => {
             { text: "🖥  Bog`lanish ☎️", callback_data: "btn_uz_5" },
             { text: "👷🏻‍♂️ Mehnat migrantlari uchun", callback_data: "btn_uz_2" },
           ],
-
           [
             { text: "🏠 Bosh sahifa", callback_data: "btn_uz_3" },
+            { text: "⚖️❗️ Korupsiya holatlari haqida xabar berish", callback_data: "btn_ru_cur"}
+          ],
+          [
+            
             { text: "⬅️ Ortga qaytish", callback_data: "btn_uz_4" },
           ],
         ],
@@ -93,6 +100,93 @@ bot.action("btn_us_0", async (ctx) => {
     console.error(error);
   }
 });
+
+// Korupsiya holatlari haqida xabar berish
+
+bot.action("btn_uz_cur", async (ctx) => {
+  try {
+    await ctx.deleteMessage();
+    await ctx.replyWithHTML(`Agar sizda korrupsiya holatlari kuzatilgan bo'lsa, siz pastdagi <b>Xabar berish</b> tugmasini bosish orgali holat yuzasidan xabar berishingiz mumkin.\n\nBunda sizdan\nFISH: ___________________\n\nAdres: __________________\n\nTel: ____________________\nkabi malumotlar berish talab etiladi.`)
+    
+    await bot.telegram.sendMessage(ctx.chat.id, "🇺🇿 O`zbekcha", {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {text: 'Xabar berish', callback_data: 'btn_uz_mes'}
+          ],
+          [
+            { text: "🏠 Bosh sahifa", callback_data: "btn_uz_3" },
+            { text: "⬅️ Ortga qaytish", callback_data: "btn_us_0" },
+          ],
+        ],
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// Сообщение о случаях коррупции
+
+bot.action("btn_ru_cur", async (ctx) => {
+  try {
+    await ctx.deleteMessage();
+    await ctx.replyWithHTML(`Если у вас есть случай коррупции, вы можете сообщить о нем, нажав кнопку <b> Сообщить </b> ниже.`)
+    
+    await bot.telegram.sendMessage(ctx.chat.id, "🇷🇺 Русcкий", {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {text: 'Сообщить', callback_data: 'btn_ru_mes'}
+          ],
+          [
+            { text: "🏠 Главная страница", callback_data: "btn_ru _3" },
+            { text: "⬅️ Назад", callback_data: "btn_ru_0" },
+          ],
+        ],
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// Xabar berish
+bot.action('btn_uz_mes', async (ctx)=>{
+  try {
+    await ctx.deleteMessage();
+    await ctx.reply("Xabar qoldiring....")
+  } catch (error) {
+    console.error(error);
+  }
+})
+
+// Сообщить
+bot.action('btn_ru_mes', async (ctx)=>{
+  try {
+    await ctx.deleteMessage();
+    await ctx.reply("Оставьте сообщение....")
+  } catch (error) {
+    console.error(error);
+  }
+})
+
+// Xabar qoldiring....
+bot.on('text', async(ctx)=>{
+  try {
+    await ctx.deleteMessage();
+    await ctx.reply(`${ JSON.stringify(ctx.update.message.text)}`)
+    await bot.telegram.sendMessage(ctx.chat.id, `Ariza qabul qilindi, ${ctx.chat.id}`, {
+      reply_markup: {
+        inline_keyboard: [
+            [{ text: "⬅️ Ortga qaytish", callback_data: "btn_uz_cur" },],
+        ],
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
+})  
 
 // Murojaat qoldirish
 bot.action("btn_uz_1-0", async (ctx) => {
@@ -211,8 +305,8 @@ bot.action("btn_uz_1-1", async (ctx) => {
       reply_markup: {
         inline_keyboard: [
           [
-            { text: "Kun.uz", url: "https://t.me/kunuz" },
-            { text: "Daryo.uz", url: "https://t.me/daryoh" },
+            { text: "IIV.uz", url: "https://iiv.uz/" },
+            { text: "MFA.uz", url: "https://mfa.uz/uz" },
           ],
           [
             { text: "TMMA uz", url: "https://t.me/migratsiyaagentligi" },
@@ -230,7 +324,7 @@ bot.action("btn_uz_1-1", async (ctx) => {
               text: "O`zbekiston temir yollari",
               url: "https://t.me/uzrailwaypress",
             },
-            { text: "Xushnudbek.uz", url: "https://t.me/xushnudbek" },
+           
           ],
           [
             { text: "🏠 Bosh sahifa", callback_data: "btn_uz_3" },
@@ -251,8 +345,8 @@ bot.action("btn_ru_1-1", async (ctx) => {
       reply_markup: {
         inline_keyboard: [
           [
-            { text: "Кун.уз", url: "https://t.me/kunuzru" },
-            { text: "Дарё.уз", url: "https://t.me/daryoh" },
+            { text: "МВД.уз", url: "https://iiv.uz/ru" },
+            { text: "МИД.уз", url: "https://mfa.uz/ru" },
           ],
           [
             { text: "АВТМ уз", url: "https://t.me/migratsiyaagentligi" },
@@ -267,7 +361,6 @@ bot.action("btn_ru_1-1", async (ctx) => {
           ],
           [
             { text: "ЖД Узбекистана", url: "https://t.me/uzrailwaypress" },
-            { text: "Xushnudbek.uz", url: "https://t.me/xushnudbek" },
           ],
           [
             { text: "🏠 Главная страница", callback_data: "btn_uz_3" },
@@ -288,7 +381,7 @@ bot.action("btn_uz_2", async (ctx) => {
     await bot.telegram.sendMessage(ctx.chat.id, "🇺🇿 O`zbekcha", {
       reply_markup: {
         inline_keyboard: [
-          [{ text: "🗂 Qonunchilik xujjatlari 🗂", callback_data: "btn_uz_120" }],
+          [{ text: "🗂 Qonunchilik hujjatlari 🗂", callback_data: "btn_uz_120" }],
           [
             {
               text: "🇺🇿 🇰🇷 Janubiy Koreyada ishlash 🇰🇷 🇺🇿",
@@ -303,41 +396,42 @@ bot.action("btn_uz_2", async (ctx) => {
           ],
           [
             {
-              text: "🤝 Xorijiy ish beruvchilari bilan shartnomalar 🤝",
+              text: "❌ Xorijga chiqish taqiqi va qarzdorlikni tekshirish ❌",
+              url: "https://mib.uz/home;jsessionid=3C820B4277E286E00DE23E6876788014.mib.uz1_1",
+            },
+          ],          
+          [
+            {
+              text: "🤝 Hamkorlik shartnomalari 🤝",
               url: "https://labormigration.uz/all-jobs/tmma-employers",
             },
           ],
           [
             {
-              text: "🌎👬🇺🇿 O‘zResga Xorijiy ishchi kuchini jalb etish jarayonini tartibga solish meyorlari",
+              text: "🌎🇺🇿 Xorijiy ishchi kuchini jalb etish jarayonini tartibga solish meyorlari",
               callback_data: "btn_uz_a1",
             },
           ],
           [
             {
-              text: "🎓 Xorijdagi mehnat migrantlariga huquqiy yordam qilish 🎓",
+              text: "🎓 Mehnat migrantlariga huquqiy yordam 🎓",
               callback_data: "btn_uz_125",
             },
           ],
           
           [
             {
-              text: "🛬 🇺🇿 Xorijdan qaytganlarni mehnat va kasbiy reintegratsiya qilish 🛬 🇺🇿",
+              text: "🛬 🇺🇿 Mehnat migrantlari reintegratsiyasi 🛬 🇺🇿",
               callback_data: "btn_uz_126",
             },
           ],
           [
             {
-              text: "💵⚰️🏥🏡 Xorijdagi mehnat migrantlarini ijtimoiy himoya qilish va moddiy yordam korsatish 💵⚰️🏥🏡",
+              text: "💵🏡 Mehnat migrantlariga moddiy va ishtimoiy yordam 💵🏡",
               callback_data: "btn_uz_127",
             },
           ],
-          [
-            {
-              text: "❌ Xorijga chiqish taqiqi va qarzdorlikni tekshirish ❌",
-              url: "https://mib.uz/home;jsessionid=3C820B4277E286E00DE23E6876788014.mib.uz1_1",
-            },
-          ],
+          
 
           [
             { text: "🏠 Bosh sahifa", callback_data: "btn_uz_3" },
@@ -937,7 +1031,12 @@ bot.action("btn_ru_2", async (ctx) => {
               callback_data: "btn_ru_122",
             },
           ],
-
+          [
+            {
+              text: "❌ Запрет на выезд и проверка долга ❌",
+              url: "https://mib.uz/home;jsessionid=3C820B4277E286E00DE23E6876788014.mib.uz1_1",
+            },
+          ],
           [
             {
               text: "🤝 Соглашения с иностранными работодателями 🤝",
@@ -946,7 +1045,7 @@ bot.action("btn_ru_2", async (ctx) => {
           ],
           [
             {
-              text: "🌎👬🇺🇿 Получение подтверждения на право трудовой деятельности на территории РУз",
+              text: "🌎🇺🇿 Получение подтверждения на право трудовой деятельности на территории РУз",
               callback_data: "btn_ru_a1",
             },
           ],
@@ -964,16 +1063,11 @@ bot.action("btn_ru_2", async (ctx) => {
           ],
           [
             {
-              text: "💵⚰️🏥🏡 Социальная защита и финансовая помощь трудящимся-мигрантам за рубежом 💵⚰️🏥🏡",
+              text: "💵🏡 Социальная защита и финансовая помощь трудящимся-мигрантам за рубежом 💵🏡",
               callback_data: "btn_ru_127",
             },
           ],
-          [
-            {
-              text: "❌ Запрет на выезд и проверка долга ❌",
-              url: "https://mib.uz/home;jsessionid=3C820B4277E286E00DE23E6876788014.mib.uz1_1",
-            },
-          ],
+          
           [
             { text: "🏠 Главная страница", callback_data: "btn_ru_3" },
             { text: "⬅️ Назад", callback_data: "btn_ru_0" },
@@ -1029,15 +1123,15 @@ bot.action("btn_uz_120", async (ctx) => {
         inline_keyboard: [
           [
             {
-              text: "Prezident qaror va farmonlari",
+              text: "Prezident hujjatlari",
               callback_data: "btn_uz_3-3",
             },
             {
-              text: "Hukumat qaror va farmoyishlari",
+              text: "Hukumat hujjatlari",
               callback_data: "btn_uz_3-0",
             },
           ],
-          [{ text: "O`z. Res. Qonun hujjatlari", callback_data: "btn_uz_4-3" }],
+          [{ text: "Qonun hujjatlari", callback_data: "btn_uz_4-3" }],
           [
             { text: "🏠 Bosh sahifa", callback_data: "btn_uz_3" },
             { text: "⬅️ Ortga qaytish", callback_data: "btn_uz_2" },
@@ -1312,7 +1406,7 @@ bot.action("btn_uz_1", async (ctx) => {
           [
             { text: "Hududiy filiallar", callback_data: "btn_uz_6" },
             {
-              text: "Xorijdagi Vakolatxonalar",
+              text: "Xorijdagi vakolatxonalar",
               callback_data: "btn_uz_7",
             },
           ],
@@ -3557,7 +3651,7 @@ bot.action("btn_uz_11", async (ctx) => {
         inline_keyboard: [
           [
             { text: "📰 Yangiliklar", callback_data: "btn_uz_1-1" },
-            { text: "💵 Valyuta kurslari", url: "https://cbu.uz" },
+            { text: "💵 Valyutalar kursi", url: "https://cbu.uz" },
           ],
           [
             { text: "📍🗺 Manzillar", callback_data: "btn_uz_1" },
@@ -3672,7 +3766,7 @@ bot.action("btn_uz_12", async (ctx) => {
         inline_keyboard: [
           [
             { text: "📰 Yangiliklar", callback_data: "btn_uz_1-1" },
-            { text: "💵 Valyuta kurslari", url: "https://cbu.uz" },
+            { text: "💵 Valyutalar kursi", url: "https://cbu.uz" },
           ],
           [
             { text: "📍🗺 Manzillar", callback_data: "btn_uz_1" },
@@ -3874,7 +3968,7 @@ infoMap(
   `\n\nFilial raxbari:\nSattorov Gavhar Adilovich\n\n☎️ +998 (95) 202 33 55 \n☎️ +998 (90) 571 47 77`,
   40.7814378842891,
   72.35021615864449,
-  "Andijon filliali malumotlari"
+  "Tashqi mehnat migratsiyasi agentligining Andijon filiali"
 );
 // Андижан
 infoMaRu(
@@ -3890,7 +3984,7 @@ infoMap(
   `\n\nFilial raxbari:\nXamdamov Anvar Normurodovich\n\n☎️ +998 (65) 226-56-99\n☎️ +998 (93) 686 11 78`,
   39.769712780281665,
   64.4076155238242,
-  "Buxoro filliali malumotlari"
+  "Tashqi mehnat migratsiyasi agentligining Buxoro filiali"
 );
 // Бухара
 infoMaRu(
@@ -3906,7 +4000,7 @@ infoMap(
   `\n\nFilial raxbari:\nAbdusaidov Sunatillo Xusanovich\n\n☎️ +998 (72) 226 91 87\n☎️ +998 (93) 992 95 59`,
   40.159728432534514,
   67.82576239167302,
-  "Jizzax filliali malumotlari"
+  "Tashqi mehnat migratsiyasi agentligining Jizzax filiali"
 );
 // Джиззах
 infoMaRu(
@@ -3922,7 +4016,7 @@ infoMap(
   `\n\nFilial raxbari:\nRaximov Tojiddin Uralovich\n\n☎️ +998 (75) 224 05 25\n☎️ +998 (98) 777 34 37`,
   38.83258357412349,
   65.80787180101096,
-  "Qashqadaryo filliali malumotlari"
+  "Tashqi mehnat migratsiyasi agentligining Qashqadaryo filiali"
 );
 // Кашкадаря
 infoMaRu(
@@ -3938,7 +4032,7 @@ infoMap(
   `\n\nFilial raxbari:\nRajabov Qaxramon Razaqovich\n\n☎️ +998 (79) 224 11 60\n☎️ +998 (98) 778 10 17`,
   40.113077394611096,
   65.36002772752512,
-  " Navoiy filliali malumotlari"
+  "Tashqi mehnat migratsiyasi agentligining Navoiy filiali"
 );
 // Наваи
 infoMaRu(
@@ -3954,7 +4048,7 @@ infoMap(
   `\n\nFilial raxbari:\nApakov Muhammadayubxon\n\n☎️ +998 (69) 227-94-64\n☎️ +998 (90) 554-22-20`,
   41.00093908208746,
   71.67300472496497,
-  "Namangan filliali malumotlari"
+  "Tashqi mehnat migratsiyasi agentligining Namangan filiali"
 );
 // Наманган
 infoMaRu(
@@ -3970,7 +4064,7 @@ infoMap(
   `\n\nFilial raxbari:\nNormuratov Umid Muxtarovich\n\n☎️ +998 (66) 233-24-00\n☎️ +998 (99) 320-62-12`,
   39.655100723087166,
   66.96653327116424,
-  "Samarqand filliali malumotlari"
+  "Tashqi mehnat migratsiyasi agentligining Samarqand filiali"
 );
 // Самарканд
 infoMaRu(
@@ -3986,7 +4080,7 @@ infoMap(
   `\n\nFilial raxbari:\nXamrayev Rustam Usmanovich\n\n☎️ +998 (76) 222-45-22\n☎️ +998 (99) 715-10-05`,
   37.22032974223839,
   67.27775099999998,
-  "Surxandaryo filliali malumotlari"
+  "Tashqi mehnat migratsiyasi agentligining Surxandaryo filiali"
 );
 // Сурхандаря
 infoMaRu(
@@ -4002,7 +4096,7 @@ infoMap(
   `\n\nFilial raxbari:\nIsroilov Sirojiddin Mamaraximov\n\n☎️ +998 (67) 225-55-59\n☎️ +998 (94) 407-18-07`,
   40.49791294050947,
   68.77627303008786,
-  "Sirdaryo filliali malumotlari"
+  "Tashqi mehnat migratsiyasi agentligining Sirdaryo filiali"
 );
 // Сирдаря
 infoMaRu(
@@ -4018,7 +4112,7 @@ infoMap(
   `\n\nFilial raxbari:\nBaxromov Nodir Qodirbek o\`g\`li\n\n☎️ +998 (99) 999 96 99`,
   41.067674257003375,
   69.34466988357757,
-  "Toshkent viloyati filliali malumotlari"
+  "Tashqi mehnat migratsiyasi agentligining Toshkent viloyati filiali"
 );
 // Ташкентская область
 infoMaRu(
@@ -4034,7 +4128,7 @@ infoMap(
   `\n\nFilial raxbari:\nTeshabayev Ulug\`bek  Yuldashevich\n\n☎️ +998 (71) 236-30-40\n☎️ +998 (71) 236-00-23\n☎️ +998 (98) 007-50-03`,
   41.30307425515684,
   69.2819443979212,
-  "Toshkent shahri filliali malumotlari"
+  "Tashqi mehnat migratsiyasi agentligining Toshkent shahri filiali"
 );
 // Город Ташкента
 infoMaRu(
@@ -4050,7 +4144,7 @@ infoMap(
   `\n\nFilial raxbari:\nAchilov Azamat Tursinbayevich\n\n☎️ +998 (61) 222-53-32\n☎️ +998 (91) 376-07-76`,
   42.44352183521285,
   59.61033841345555,
-  "Nukus shahri filliali malumotlari"
+  "Tashqi mehnat migratsiyasi agentligining Nukus filiali"
 );
 // Нукус
 infoMaRu(
@@ -4066,7 +4160,7 @@ infoMap(
   `\n\nFilial raxbari:\nRamadanov Mixail Sergeyevich\n\n☎️ +998 (62) 224-12-35\n☎️ +998 (91) 376-07-76`,
   41.543709163865586,
   60.6154671327727,
-  "Xorazm viloyati filliali malumotlari"
+  "Tashqi mehnat migratsiyasi agentligining Xorazm filiali"
 );
 // Харазм
 infoMaRu(
@@ -4082,7 +4176,7 @@ infoMap(
   `\n\nFilial raxbari:\nAtabayev Otabek Ulug\`bekovich\n\n☎️ +998 (91) 661-07-77\n☎️ +998 (73) 244-40-01`,
   40.38805014203129,
   71.77078081349228,
-  "Farg'ona viloyati filliali malumotlari"
+  "Tashqi mehnat migratsiyasi agentligining Farg'ona filiali"
 );
 // Фергана
 infoMaRu(
@@ -4136,7 +4230,7 @@ bot.action("btn_uz_27", async (ctx) => {
           [
             { text: "Hududiy filiallar", callback_data: "btn_uz_6" },
             {
-              text: "Xorijdagi Vakolatxonalar",
+              text: "Xorijdagi vakolatxonalar",
               callback_data: "btn_uz_7",
             },
           ],
@@ -4213,7 +4307,7 @@ bot.action("btn_uz_30", async (ctx) => {
           [
             { text: "Hududiy filiallar", callback_data: "btn_uz_6" },
             {
-              text: "Xorijdagi Vakolatxonalar",
+              text: "Xorijdagi vakolatxonalar",
               callback_data: "btn_uz_7",
             },
           ],
