@@ -35,7 +35,7 @@ bot.action("btn_ru_0", async (ctx) => {
       reply_markup: {
         inline_keyboard: [
           [
-            { text: "📰Новости", callback_data: "btn_ru_1-1" },
+            { text: "📰 Новости", callback_data: "btn_ru_1-1" },
             { text: "💵 Курсы валют", url: "https://cbu.uz" },
           ],
           [
@@ -47,13 +47,13 @@ bot.action("btn_ru_0", async (ctx) => {
           ],
 
           [
-            { text: "🖥  Связаться ☎️", callback_data: "btn_ru_5" },
-            { text: "👷🏻‍♂️ Для Мигрантов", callback_data: "btn_ru_2" },
+            { text: "☎️ Связаться", callback_data: "btn_ru_5" },
+            { text: "👷🏻‍♂️ Для трудовых мигрантов", callback_data: "btn_ru_2" },
           ],
           [
             { text: "🏠 Главная страница", callback_data: "btn_ru_3" },
             {
-              text: "⚖️❗️ Сообщение о случаях коррупции",
+              text: "💵 Сообщить о коррупции",
               callback_data: "btn_ru_cur",
             },
           ],
@@ -91,7 +91,7 @@ bot.action("btn_us_0", async (ctx) => {
           [
             { text: "🏠 Bosh sahifa", callback_data: "btn_uz_3" },
             {
-              text: "⚖️❗️ Korrupsiya haqida xabar berish",
+              text: "💵 Korrupsiya haqida xabar",
               callback_data: "btn_uz_cur",
             },
           ],
@@ -184,14 +184,21 @@ bot.action("btn_uz_mes", async (ctx) => {
     try {
       await ctx.deleteMessage();
       await ctx.reply(`${JSON.stringify(ctx.update.message.text)}`);
-      await bot.telegram.sendMessage(369531927, `${ctx.from.first_name} ${ctx.from.last_name} fuqrodan ariza keldi\n\nAriza mazmuni\n\n${ctx.update.message.text}`, {
+      
+      await bot.telegram.sendMessage(369531927, `${ctx.from.first_name} ${ctx.from.last_name} fuqarodan ariza keldi\n\nAriza mazmuni\n\n${ctx.update.message.text}`, {
         reply_markup: {
           inline_keyboard: [
             [{ text: "⬅️ Ortga qaytish", callback_data: "start" }],
           ],
         },
-      } 
-      )
+      })
+      await bot.telegram.sendMessage(1376973624, `Fuqarodan ariza keldi\n\nAriza mazmuni\n\n${ctx.update.message.text}`, {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "⬅️ Ortga qaytish", callback_data: "start" }],
+          ],
+        },
+      })
       await bot.telegram.sendMessage(
         ctx.chat.id,
         `Arazangiz qabul qilindi`,
@@ -223,6 +230,13 @@ bot.action("btn_ru_mes", async (ctx) => {
       await ctx.deleteMessage();
       await ctx.reply(`${JSON.stringify(ctx.update.message.text)}`);
       await bot.telegram.sendMessage(369531927, `${ctx.from.first_name} ${ctx.from.last_name}\n${ctx.update.message.text}`, {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "⬅️Назад", callback_data: "start" }],
+          ],
+        },
+      })
+      await bot.telegram.sendMessage(1376973624, `Заява пришла`, {
         reply_markup: {
           inline_keyboard: [
             [{ text: "⬅️Назад", callback_data: "start" }],
@@ -3753,7 +3767,7 @@ bot.action("btn_ru_11", async (ctx) => {
       reply_markup: {
         inline_keyboard: [
           [
-            { text: "📰Новости", callback_data: "btn_ru_1-1" },
+            { text: "📰 Новости", callback_data: "btn_ru_1-1" },
             { text: "💵 Курсы валют", url: "https://cbu.uz" },
           ],
           [
@@ -3766,7 +3780,7 @@ bot.action("btn_ru_11", async (ctx) => {
 
           [
             { text: "☎️ Связаться", callback_data: "btn_ru_5" },
-            { text: "👷🏻‍♂️ Для Мигрантов", callback_data: "btn_ru_2" },
+            { text: "👷🏻‍♂️ Для трудовых мигрантов", callback_data: "btn_ru_2" },
           ],
           [
             { text: "🏠 Главная страница", callback_data: "btn_ru_3" },
@@ -3868,7 +3882,7 @@ bot.action("btn_ru_12", async (ctx) => {
       reply_markup: {
         inline_keyboard: [
           [
-            { text: "📰Новости", callback_data: "btn_ru_1-1" },
+            { text: "📰 Новости", callback_data: "btn_ru_1-1" },
             { text: "💵 Курсы валют", url: "https://cbu.uz" },
           ],
           [
@@ -3881,7 +3895,7 @@ bot.action("btn_ru_12", async (ctx) => {
 
           [
             { text: "☎️ Связаться", callback_data: "btn_ru_5" },
-            { text: "👷🏻‍♂️ Для Мигрантов", callback_data: "btn_ru_2" },
+            { text: "👷🏻‍♂️ Для трудовых мигрантов", callback_data: "btn_ru_2" },
           ],
           [
             { text: "🏠 Главная страница", callback_data: "btn_ru_3" },
