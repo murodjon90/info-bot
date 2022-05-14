@@ -5,8 +5,9 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 const telegram = new Telegram(process.env.BOT_TOKEN);
 
 bot.start(async (ctx) => {
+  
   try {
-    await ctx.deleteMessage();
+    // await ctx.deleteMessage();
     await bot.telegram.sendMessage(
       ctx.chat.id,
       "Assalomu alaykum!\nЗдравствуйте!",
@@ -21,6 +22,7 @@ bot.start(async (ctx) => {
         },
       }
     );
+    
   } catch (error) {
     console.error(error);
   }
@@ -50,15 +52,16 @@ bot.action("btn_ru_0", async (ctx) => {
           ],
           [
             { text: "🏠 Главная страница", callback_data: "btn_ru_3" },
-            {text: "⚖️❗️ Сообщение о случаях коррупции", callback_data: "btn_ru_cur"}
+            {
+              text: "⚖️❗️ Сообщение о случаях коррупции",
+              callback_data: "btn_ru_cur",
+            },
           ],
-          [
-            
-            { text: "⬅️ Назад", callback_data: "btn_ru_4" },
-          ],
+          [{ text: "⬅️ Назад", callback_data: "btn_ru_4" }],
         ],
       },
     });
+    
   } catch (error) {
     console.error(error);
   }
@@ -82,17 +85,17 @@ bot.action("btn_us_0", async (ctx) => {
             },
           ],
           [
-            { text: "🖥  Bog`lanish ☎️", callback_data: "btn_uz_5" },
+            { text: "☎️ Bog`lanish ", callback_data: "btn_uz_5" },
             { text: "👷🏻‍♂️ Mehnat migrantlari uchun", callback_data: "btn_uz_2" },
           ],
           [
             { text: "🏠 Bosh sahifa", callback_data: "btn_uz_3" },
-            { text: "⚖️❗️ Korupsiya holatlari haqida xabar berish", callback_data: "btn_ru_cur"}
+            {
+              text: "⚖️❗️ Korrupsiya haqida xabar berish",
+              callback_data: "btn_uz_cur",
+            },
           ],
-          [
-            
-            { text: "⬅️ Ortga qaytish", callback_data: "btn_uz_4" },
-          ],
+          [{ text: "⬅️ Ortga qaytish", callback_data: "btn_uz_4" }],
         ],
       },
     });
@@ -106,21 +109,18 @@ bot.action("btn_us_0", async (ctx) => {
 bot.action("btn_uz_cur", async (ctx) => {
   try {
     await ctx.deleteMessage();
-    await ctx.replyWithHTML(`Agar sizda korrupsiya holatlari kuzatilgan bo'lsa, siz pastdagi <b>Xabar berish</b> tugmasini bosish orgali holat yuzasidan xabar berishingiz mumkin.\n\nBunda sizdan\nFISH: ___________________\n\nAdres: __________________\n\nTel: ____________________\nkabi malumotlar berish talab etiladi.`)
-    
-    await bot.telegram.sendMessage(ctx.chat.id, "🇺🇿 O`zbekcha", {
+    await bot.telegram.sendMessage(ctx.chat.id, "Shaxsingizga oid ma'lumotlar talab etilmaydi.", {
       reply_markup: {
         inline_keyboard: [
-          [
-            {text: 'Xabar berish', callback_data: 'btn_uz_mes'}
-          ],
+          [{ text: "📤 Xabar berish", callback_data: "btn_uz_mes" }],
           [
             { text: "🏠 Bosh sahifa", callback_data: "btn_uz_3" },
             { text: "⬅️ Ortga qaytish", callback_data: "btn_us_0" },
           ],
-        ],
+        ],  
       },
     });
+    await ctx.deleteMessage();
   } catch (error) {
     console.error(error);
   }
@@ -131,62 +131,145 @@ bot.action("btn_uz_cur", async (ctx) => {
 bot.action("btn_ru_cur", async (ctx) => {
   try {
     await ctx.deleteMessage();
-    await ctx.replyWithHTML(`Если у вас есть случай коррупции, вы можете сообщить о нем, нажав кнопку <b> Сообщить </b> ниже.`)
-    
-    await bot.telegram.sendMessage(ctx.chat.id, "🇷🇺 Русcкий", {
+    await bot.telegram.sendMessage(ctx.chat.id, "Личная информация не требуется", {
       reply_markup: {
         inline_keyboard: [
+          [{ text: "📤 Сообщить", callback_data: "btn_ru_mes" }],
           [
-            {text: 'Сообщить', callback_data: 'btn_ru_mes'}
-          ],
-          [
-            { text: "🏠 Главная страница", callback_data: "btn_ru _3" },
+            { text: "🏠 Главная страница", callback_data: "btn_ru_3" },
             { text: "⬅️ Назад", callback_data: "btn_ru_0" },
           ],
         ],
       },
     });
+    
   } catch (error) {
     console.error(error);
   }
 });
 
+// function what(btn) {
+//   if (btn!=='btn_uz_mes' || btn!=='btn_ru_mes') {
+//     bot.on('text', async(ctx)=>{
+//       try {
+//         await ctx.deleteMessage();
+//         await bot.telegram.sendMessage(ctx.chat.id, "🧐", {
+//           reply_markup: {
+//             inline_keyboard: [
+//               [
+//                 { text: "⬅️⬅️⬅️⬅️⬅️", callback_data: btn }
+//               ],
+//             ]
+//           }
+//         })
+        
+//       } catch (error) {
+//         console.error(error);
+//       }
+//     })
+//   }
+// }
+
 // Xabar berish
-bot.action('btn_uz_mes', async (ctx)=>{
+bot.action("btn_uz_mes", async (ctx) => {
   try {
     await ctx.deleteMessage();
-    await ctx.reply("Xabar qoldiring....")
+    await ctx.reply("Xabar qoldiring....");
+    
   } catch (error) {
     console.error(error);
   }
-})
+  
+  bot.on("text", async (ctx) => {
+    try {
+      await ctx.deleteMessage();
+      await ctx.reply(`${JSON.stringify(ctx.update.message.text)}`);
+      await bot.telegram.sendMessage(369531927, `${ctx.from.first_name} ${ctx.from.last_name} fuqrodan ariza keldi\n\nAriza mazmuni\n\n${ctx.update.message.text}`, {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "⬅️ Ortga qaytish", callback_data: "start" }],
+          ],
+        },
+      } 
+      )
+      await bot.telegram.sendMessage(
+        ctx.chat.id,
+        `Arazangiz qabul qilindi`,
+        {
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: "⬅️ Ortga qaytish", callback_data: "start" }],
+            ],
+          },
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+});
 
 // Сообщить
-bot.action('btn_ru_mes', async (ctx)=>{
+bot.action("btn_ru_mes", async (ctx) => {
   try {
     await ctx.deleteMessage();
-    await ctx.reply("Оставьте сообщение....")
+    await ctx.reply("Оставьте сообщение....");
+    
   } catch (error) {
     console.error(error);
   }
-})
+  bot.on("text", async (ctx) => {
+    try {
+      await ctx.deleteMessage();
+      await ctx.reply(`${JSON.stringify(ctx.update.message.text)}`);
+      await bot.telegram.sendMessage(369531927, `${ctx.from.first_name} ${ctx.from.last_name}\n${ctx.update.message.text}`, {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "⬅️Назад", callback_data: "start" }],
+          ],
+        },
+      })
+      await bot.telegram.sendMessage(
+        ctx.chat.id,
+        `Ваша Заявка прията`,
+        {
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: "⬅️Назад", callback_data: "start" }],
+            ],
+          },
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+  
+});
 
-// Xabar qoldiring....
-bot.on('text', async(ctx)=>{
+// boshiga qaytish
+bot.action("start", async (ctx) => {
   try {
     await ctx.deleteMessage();
-    await ctx.reply(`${ JSON.stringify(ctx.update.message.text)}`)
-    await bot.telegram.sendMessage(ctx.chat.id, `Ariza qabul qilindi, ${ctx.chat.id}`, {
-      reply_markup: {
-        inline_keyboard: [
-            [{ text: "⬅️ Ortga qaytish", callback_data: "btn_uz_cur" },],
-        ],
-      },
-    });
+    await bot.telegram.sendMessage(
+      ctx.chat.id,
+      "Assalomu alaykum!\nЗдравствуйте!",
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              { text: "🇺🇿 O`zbekcha", callback_data: "btn_us_0" },
+              { text: "🇷🇺 Русский", callback_data: "btn_ru_0" },
+            ],
+          ],
+        },
+      }
+    );
   } catch (error) {
     console.error(error);
   }
-})  
+});
+
 
 // Murojaat qoldirish
 bot.action("btn_uz_1-0", async (ctx) => {
@@ -324,7 +407,6 @@ bot.action("btn_uz_1-1", async (ctx) => {
               text: "O`zbekiston temir yollari",
               url: "https://t.me/uzrailwaypress",
             },
-           
           ],
           [
             { text: "🏠 Bosh sahifa", callback_data: "btn_uz_3" },
@@ -359,9 +441,7 @@ bot.action("btn_ru_1-1", async (ctx) => {
             { text: "Новости Узбекистана", url: "https://t.me/NuzUzru" },
             { text: "Легальная информация", url: "https://t.me/pravoinf" },
           ],
-          [
-            { text: "ЖД Узбекистана", url: "https://t.me/uzrailwaypress" },
-          ],
+          [{ text: "ЖД Узбекистана", url: "https://t.me/uzrailwaypress" }],
           [
             { text: "🏠 Главная страница", callback_data: "btn_uz_3" },
             { text: "⬅️ Назад", callback_data: "btn_us_0" },
@@ -399,7 +479,7 @@ bot.action("btn_uz_2", async (ctx) => {
               text: "❌ Xorijga chiqish taqiqi va qarzdorlikni tekshirish ❌",
               url: "https://mib.uz/home;jsessionid=3C820B4277E286E00DE23E6876788014.mib.uz1_1",
             },
-          ],          
+          ],
           [
             {
               text: "🤝 Hamkorlik shartnomalari 🤝",
@@ -408,7 +488,7 @@ bot.action("btn_uz_2", async (ctx) => {
           ],
           [
             {
-              text: "🌎🇺🇿 Xorijiy ishchi kuchini jalb etish jarayonini tartibga solish meyorlari",
+              text: "🌎🇺🇿 Xorijiy ishchi kuchini jalb etish",
               callback_data: "btn_uz_a1",
             },
           ],
@@ -418,21 +498,18 @@ bot.action("btn_uz_2", async (ctx) => {
               callback_data: "btn_uz_125",
             },
           ],
-          
+          [
+            {
+              text: "💵🏡 Moddiy va ijtimoiy yordam 💵🏡",
+              callback_data: "btn_uz_127",
+            },
+          ],
           [
             {
               text: "🛬 🇺🇿 Mehnat migrantlari reintegratsiyasi 🛬 🇺🇿",
               callback_data: "btn_uz_126",
             },
           ],
-          [
-            {
-              text: "💵🏡 Mehnat migrantlariga moddiy va ishtimoiy yordam 💵🏡",
-              callback_data: "btn_uz_127",
-            },
-          ],
-          
-
           [
             { text: "🏠 Bosh sahifa", callback_data: "btn_uz_3" },
             { text: "⬅️ Ortga qaytish", callback_data: "btn_us_0" },
@@ -446,7 +523,7 @@ bot.action("btn_uz_2", async (ctx) => {
 });
 
 //O‘zResga Xorijiy ishchi kuchini jalb etish jarayonini tartibga solish meyorlari
-bot.action("btn_uz_a1", async (ctx)=>{
+bot.action("btn_uz_a1", async (ctx) => {
   try {
     await ctx.deleteMessage();
     await ctx.reply(`
@@ -462,7 +539,7 @@ bot.action("btn_uz_a1", async (ctx)=>{
     g) chet el fuqarosining 3x4 sm hajmli elektron fotosurati;
     d) chet el fuqarosining malakasini tasdiqlovchi hujjatlar;
     e) viza rejimi o‘rnatilgan xorijiy davlatlar fuqarolari kirish vizasining nusxasi («E» mehnat vizasi, «B-1» va «B-2» biznes vizasi, “S-3” xizmat vizasi yoki vatandoshlar uchun nazarda tutilgan boshqa turdagi vizalar).
-    `)
+    `);
     await bot.telegram.sendMessage(ctx.chat.id, "🇺🇿 O`zbekcha", {
       reply_markup: {
         inline_keyboard: [
@@ -470,16 +547,15 @@ bot.action("btn_uz_a1", async (ctx)=>{
             { text: "🏠 Bosh sahifa", callback_data: "btn_uz_3" },
             { text: "⬅️ Ortga qaytish", callback_data: "btn_uz_2" },
           ],
-        ]
-      }
-    })
-    
+        ],
+      },
+    });
   } catch (error) {
     console.error(error);
   }
-})
+});
 //O‘zResga Xorijiy ishchi kuchini jalb etish jarayonini tartibga solish meyorlari
-bot.action("btn_uz_a1", async (ctx)=>{
+bot.action("btn_uz_a1", async (ctx) => {
   try {
     await ctx.deleteMessage();
     await ctx.reply(`
@@ -495,7 +571,7 @@ bot.action("btn_uz_a1", async (ctx)=>{
     g) chet el fuqarosining 3x4 sm hajmli elektron fotosurati;
     d) chet el fuqarosining malakasini tasdiqlovchi hujjatlar;
     e) viza rejimi o‘rnatilgan xorijiy davlatlar fuqarolari kirish vizasining nusxasi («E» mehnat vizasi, «B-1» va «B-2» biznes vizasi, “S-3” xizmat vizasi yoki vatandoshlar uchun nazarda tutilgan boshqa turdagi vizalar).
-    `)
+    `);
     await bot.telegram.sendMessage(ctx.chat.id, "🇺🇿 O`zbekcha", {
       reply_markup: {
         inline_keyboard: [
@@ -503,24 +579,21 @@ bot.action("btn_uz_a1", async (ctx)=>{
             { text: "🏠 Bosh sahifa", callback_data: "btn_uz_3" },
             { text: "⬅️ Ortga qaytish", callback_data: "btn_uz_2" },
           ],
-        ]
-      }
-    })
-    
+        ],
+      },
+    });
   } catch (error) {
     console.error(error);
   }
-})
+});
 
 // Xorijdan qaytganlarni mehnat va kasbiy reintegratsiya qilish
 bot.action("btn_uz_126", async (ctx) => {
   try {
     await ctx.deleteMessage();
     await ctx.reply(`
-      Хориждан қайтганларни меҳнат ва касбий реинтеграция қилиш бошқармаси 
-
-      Хориждан қайтиб келган меҳнат мигрантларига кўрсатиладиган 
-      молиявий ёрдам ва ҳизматлар 
+      Хориждан қайтиб келган меҳнат мигрантларига 
+      кўрсатиладиган молиявий ёрдам ва ҳизматлар 
       1.Тадбиркорлик ўқув курсларига йўналтириш;
       2.Имтиёзли кредит олишда кўмак кўрсатиш;
       3.Субсидия бериш орқали бандлигини таъминлаш;
@@ -586,7 +659,6 @@ bot.action("btn_uz_127", async (ctx) => {
   try {
     await ctx.deleteMessage();
     ctx.reply(`
-    Xorijdagi mehnat migrantlarini ijtimoiy himoya qilish va moddiy yordam ko‘rsatish boshqarmasi
     Boshqarma o‘z faoliyatini bir necha yo‘nalishda olib boradi:
     1)	Xorijda mehnat faoliyatini amalga oshirish davrida vafot etgan fuqarolar jasadini O‘zbekistonga olib kelish;
     2)	Xorijda murakkab moliyaviy holatda qolgan, og‘ir tan-jarohati olgan, majburiy mehnat qurboni bo‘lgan, hujjatlarini yo‘qotgan fuqarolarni O‘zbekistonga qaytarishda avia va temiryo‘l chiptalari haqini to‘lash;
@@ -628,11 +700,11 @@ bot.action("btn_ru_127", async (ctx) => {
     Управление социальной защиты и материальной помощи трудовым мигрантам за рубежом 
 
       Основные направления:
-      1.	Репатриации тел граждан Республики Узбекистан, умерших в период нахождения в трудовой миграции;
-      2.	Оплата авиа и железнодорожных билетов  для возвращения в Узбекистан граждан Республики Узбекистан, подвергшим насилию, принудительному труду и дискриминации, нарушению трудовых и иных прав, попавших в сложное финансовое положение и оставших без документов, подверждающих личность, без средств к существованию в период осуществления трудовой деятельности за рубежом , а также получивших увечье или тяжелые травмы во время трудовой деятельности за рубежом;
+      1.	Репатриации тел граждан РУз, умерших в период нахождения в трудовой миграции;
+      2.	Оплата авиа и железнодорожных билетов  для возвращения в Узбекистан граждан РУз, подвергшим насилию, принудительному труду и дискриминации, нарушению трудовых и иных прав, попавших в сложное финансовое положение и оставших без документов, подверждающих личность, без средств к существованию в период осуществления трудовой деятельности за рубежом , а также получивших увечье или тяжелые травмы во время трудовой деятельности за рубежом;
       3.	Предоставление временного жилья  (хостел на срок до 30 суток) гражданам, оставшиеся без средств и жилья для проживания в период осуществления трудовой деятельности за рубежом;
       4.	Оказание социальной и материальной помощи гражданам, попавших в сложное финансовое положение, без жилья и работы в период осуществления трудовой деятельности за рубежом;
-      5.	Полное или частичное возмещение медицинских расходов граждан Республики Узбекистан, перенесших острое или тяжелое заболевание в период осуществления трудовой деятельности за рубежом (до 1500 тыс долларов США);
+      5.	Полное или частичное возмещение медицинских расходов граждан РУз, перенесших острое или тяжелое заболевание в период осуществления трудовой деятельности за рубежом (до 1500 тыс долларов США);
       6.	Оказания содействия трудоустройства безработным гражданам РУз  в период осуществления трудовой деятельности за рубежом;
 
       Требуемые документы, которые должны быть предоставлены гражданами РУз:
@@ -665,8 +737,7 @@ bot.action("btn_ru_127", async (ctx) => {
 bot.action("btn_uz_125", async (ctx) => {
   try {
     await ctx.deleteMessage();
-    await ctx.reply(`Xorijdagi mehnat migrantlarini huquqiy himoya qilish boshqarmasi.
-
+    await ctx.reply(`
     Boshqarma oʻz faoliyatini bir necha yoʻnalishda olib boradi.
     1. Ish beruvchidan ish haqini undirish;
     2. Ish beruvchidan fuqarolik pasportini qaytarishda yordam berish;
@@ -736,7 +807,7 @@ bot.action("btn_uz_122", async (ctx) => {
         inline_keyboard: [
           [
             {
-              text: "TMMA tomonidan taqdim etilayotgan xorijdari vakansiyalar",
+              text: "Xoridagi bo`sh ish o`rinlari",
               url: "https://labormigration.uz/all-jobs/tmma-vacancies",
             },
           ],
@@ -974,7 +1045,7 @@ bot.action("testru", async (ctx) => {
     //   Порядок проведения эпс-тематической экспертизы
 
     //   Тест на eps-topical могут пройти следующие граждане:
-    //   1. Граждане Республики Узбекистан;
+    //   1. Граждане РУз;
     //   2. Граждане в возрасте от 18 лет до 39 лет;
     //   3. Граждане, владеющие корейским языком;
     //   4. Граждане, которым не запрещен выезд за границу;
@@ -1067,7 +1138,7 @@ bot.action("btn_ru_2", async (ctx) => {
               callback_data: "btn_ru_127",
             },
           ],
-          
+
           [
             { text: "🏠 Главная страница", callback_data: "btn_ru_3" },
             { text: "⬅️ Назад", callback_data: "btn_ru_0" },
@@ -1081,7 +1152,7 @@ bot.action("btn_ru_2", async (ctx) => {
 });
 
 // Получение подтверждения на право трудовой деятельности на территории РУз
-bot.action("btn_ru_a1", async (ctx)=>{
+bot.action("btn_ru_a1", async (ctx) => {
   try {
     await ctx.deleteMessage();
     await ctx.reply(`
@@ -1098,7 +1169,7 @@ bot.action("btn_ru_a1", async (ctx)=>{
     г) документы, подтверждающие квалификацию иностранного гражданина;
     д) копия въездной визы для граждан иностранных государств с визовым режимом ("E" рабочая виза, "B-1" и "B-2" бизнес виза, служебная виза "S-3" или другие типы виз для граждан).
     
-    `)
+    `);
     await bot.telegram.sendMessage(ctx.chat.id, "🇷🇺 Русский", {
       reply_markup: {
         inline_keyboard: [
@@ -1106,13 +1177,13 @@ bot.action("btn_ru_a1", async (ctx)=>{
             { text: "🏠 Главная страница", callback_data: "btn_ru_3" },
             { text: "⬅️ Назад", callback_data: "btn_ru_2" },
           ],
-        ]
-      }
-    })
+        ],
+      },
+    });
   } catch (error) {
     console.error(error);
   }
-})
+});
 
 // Migratsiyaga oid qonun xujjatlari
 bot.action("btn_uz_120", async (ctx) => {
@@ -1162,7 +1233,7 @@ bot.action("btn_ru_120", async (ctx) => {
           ],
           [
             {
-              text: "Законодательство Республики Узбекистан ",
+              text: "Законодательство РУз ",
               callback_data: "btn_ru_4-3",
             },
           ],
@@ -1247,7 +1318,7 @@ bot.action("btn_uz_4-3", async (ctx) => {
     console.error(error);
   }
 });
-//Законодательство Республики Узбекистан
+//Законодательство РУз
 bot.action("btn_ru_4-3", async (ctx) => {
   try {
     await ctx.deleteMessage();
@@ -1442,7 +1513,7 @@ bot.action("btn_ru_1", async (ctx) => {
           [
             { text: "Посольства РУз за рубежом", callback_data: "btn_ru_8" },
             {
-              text: "Генеральные Консульства РУз за рубежом",
+              text: "Генеральные консульства РУз за рубежом",
               callback_data: "btn_ru_9",
             },
           ],
@@ -1595,7 +1666,7 @@ consul(
   36.69593103560911,
   67.11685131114201
 );
-// Консульство Республики Узбекистан в городе Мазари-Шариф
+// Консульство РУз в городе Мазари-Шариф
 consulRu(
   "btn_ru_110",
   `Консул:\nAбдураззаков Миродил Шарипович\n\nАдрес:\nAfghanistan, Mazori Sharif, 3-nohiya, Guzari Khoja Hayroniya 44\n\n☎️ 200-27-13\n☎️ +99876 - 502-14-02(Дом Узб.)\n\n🪙 msharif.mfa.uz \n\n📨 uzmazarconsulate@rambler.ru`,
@@ -1783,7 +1854,7 @@ bot.action("btn_ru_9", async (ctx) => {
           ],
           [
             {
-              text: "Консульство    РУз в городе Мазари-Шариф",
+              text: "Консульство РУз в городе Мазари-Шариф",
               callback_data: "btn_ru_110",
             },
           ],
@@ -2018,7 +2089,7 @@ elchi(
   16.312963926402904
 );
 
-//Посольство Республики Узбекистан в Австрийской Республике
+//Посольство РУз в Австрийской Республике
 elchiRu(
   "btn_ru_69",
   `Чрезвычайный и Полномочный Посол:\nФайзуллаев Абат Азатович\n\nАдрес:\nPötzleinsdorfer Straße 49A-1180, Вена\n\n☎️ 315-39-94\n☎️ 315-39-95\n\n🪙 www.usbekistan.at, austria.mfa.uz\n\n📨embassy@usbekistan.at`,
@@ -2033,7 +2104,7 @@ elchi(
   40.35129867707628,
   49.804822174569225
 );
-//Посольство Республики Узбекистан в Азербайджанской Республике
+//Посольство РУз в Азербайджанской Республике
 elchiRu(
   "btn_ru_70",
   `Чрезвычайный и Полномочный Посол:\nАшрафханов Бахром Баходирович\n\nАдрес:\nБаку, Патамдар, 1-е шоссе, проезд 9, 437 квартира\n\n☎️ 497-25-49\n☎️ 497-25-52\n\n🪙 www.uzembassy.az, azerbaijan.mfa.uz\n\n📨 office@uzembassy.az`,
@@ -2048,7 +2119,7 @@ elchi(
   34.53979727628865,
   69.1826342323586
 );
-//Посольство Республики Узбекистан в Афганистане
+//Посольство РУз в Афганистане
 elchiRu(
   "btn_ru_71",
   `Чрезвычайный и Полномочный Посол:\nШадманов Ядгархожа Махаматович\n\nАдрес:\nКарта-и-сех, Хаджи Мулла Ватт, Кабул\n\n☎️ 20-250-04-31\n\n🪙 www.afghanistan.mfa.uz`,
@@ -2063,7 +2134,7 @@ elchi(
   53.939271184180775,
   27.49223602716975
 );
-//Посольство Республики Узбекистан в Республике Беларусь
+//Посольство РУз в Республике Беларусь
 elchiRu(
   "btn_ru_72",
   `Чрезвычайный и Полномочный Посол:\nВакант\n\nАдрес:\nг.Минск, ул. Покровская, д.24\n\n☎️ 235-72-08\n\n🪙  www.uzembassy.by, belorussia.mfa.uz\n\n📨 uzembassy.by@gmail.com`,
@@ -2078,7 +2149,7 @@ elchi(
   50.80305823116729,
   4.3881604958097
 );
-//Посольство Республики Узбекистан в Королевстве Бельгия
+//Посольство РУз в Королевстве Бельгия
 elchiRu(
   "btn_ru_73",
   `Чрезвычайный и Полномочный Посол:\nХакимов Дильёр Зафарович\n\nАдрес:\nAv.F.Roosevelt, 99 B-1050 Брюссель\n\n☎️ 672-88-44\n☎️ 488-41-48-06\n\n🪙 http://belgium.mfa.uz\n\n📨 embassy@uzbekistan.be`,
@@ -2093,7 +2164,7 @@ elchi(
   51.50664268170274,
   -0.20515924409555078
 );
-//Посольство Республики Узбекистан в Соединенном Королевстве Великобритании и Северной Ирландии
+//Посольство РУз в Соединенном Королевстве Великобритании и Северной Ирландии
 elchiRu(
   "btn_ru_74",
   `Чрезвычайный и Полномочный Посол:\nРустамов Саид Хуршедович\n\nАдрес:\n41 Holland Park, London W11 3RP\n\n☎️ 207-229-7679\n☎️ 871-468-1100\n\n🪙  www.uzbekembassy.org, uk.mfa.uz\n\n📨  info@uzembassy.uk, consul@uzbekembassy.org `,
@@ -2108,7 +2179,7 @@ elchi(
   30.042451025212017,
   31.214712055259547
 );
-//Посольство Республики Узбекистан в Арабской Республике Египет
+//Посольство РУз в Арабской Республике Египет
 elchiRu(
   "btn_ru_75",
   `Чрезвычайный и Полномочный Посол:\nКиличев Мансурбек Бахтиярович \n\nАдрес:\n18, Sad El-Aali Street, Dokki, Cairo, Egypt. Postal Code: 12311\n\n☎️ 3336-1723\n\n🪙   www.uzembegypt.com, egypt.mfa.uz\n\n📨  uzembegypt@gmail.com`,
@@ -2123,7 +2194,7 @@ elchi(
   40.435752362402454,
   -3.6897059598015853
 );
-//Посольство Республики Узбекистан в Королевстве Испания
+//Посольство РУз в Королевстве Испания
 elchiRu(
   "btn_ru_76",
   `Чрезвычайный и Полномочный Посол:\nГаниев Жахонгир Дунанович\n\nАдрес:\nPlaza de la Lealtad 3, entreplanta derecha, 28014 Madrid\n\n☎️ 310-16-39\n\n🪙 www.uzbekembassy.es, spain.mfa.uz\n\n📨  secretaria@uzbekembassy.es, consulado@uzbekembassy.es`,
@@ -2138,7 +2209,7 @@ elchi(
   41.909750408926016,
   12.470312340244002
 );
-//Посольство Республики Узбекистан в Итальянской Республике
+//Посольство РУз в Итальянской Республике
 elchiRu(
   "btn_ru_77",
   `Чрезвычайный и Полномочный Посол:\nАкбаров Отабек Хамидуллаевич\n\nАдрес:\nVia Pompeo Magno 1, 00192 Roma, Italia\n\n☎️ 87860-310\n\n🪙 italia.mfa.uz\n\n📨 ambasciata@uzbekistanitalia.org`,
@@ -2153,7 +2224,7 @@ elchi(
   32.08754611599336,
   34.81746869763784
 );
-//Посольство Республики Узбекистан в Государстве Израиль
+//Посольство РУз в Государстве Израиль
 elchiRu(
   "btn_ru_78",
   `Чрезвычайный и Полномочный Посол:\nМахмудова Феруза Юлдашевна\n\nАдрес:\nRamat Gan c., 52413, 31 Moshe Sharet Str.\n\n☎️ 672-23-71\n\n🪙 www.uzbembassy.org.il, israel.mfa.uz.\n\n📨 admindep@uzbembassy.org.il`,
@@ -2168,7 +2239,7 @@ elchi(
   28.590722793936884,
   77.17780408535243
 );
-//Посольство Республики Узбекистан в Республике Индия
+//Посольство РУз в Республике Индия
 elchiRu(
   "btn_ru_79",
   `Чрезвычайный и Полномочный Посол:\nАхатов Дилшод Хамидович\n\nАдрес:\nEP-40, Dr. Radhakrishnan Marg, Chanakyapuri, New Delhi-110021.\n\n☎️ 2467-0774\n☎️ 2467-0775\n☎️ 24105-640\n\n🪙 www.uzbekembassy.in, india.mfa.uz\n\n📨 in.uzembassy@mfa.uz`,
@@ -2183,7 +2254,7 @@ elchi(
   -6.217212721435194,
   106.81861809317282
 );
-//Посольство Республики Узбекистан в Республике Индонезия
+//Посольство РУз в Республике Индонезия
 elchiRu(
   "btn_ru_80",
   `Чрезвычайный и Полномочный Посол:\nРозукулов Улугбек Убайдуллаевич\n\nАдрес:\nJl. Sriwijaya Raya 30, Kebayoran Baru, South Jakarta, 12110)\n\n☎️ 722-99-18\n☎️ 722-99-19\n\n🪙 uzembassy.or.id, indonesia.mfa.uz \n\n📨 id.uzembassy@mfa.uz, embassyuzbekistan@gmail.com`,
@@ -2198,7 +2269,7 @@ elchi(
   35.804237034744176,
   51.475708497735454
 );
-//Посольство Республики Узбекистан в Исламской Республике Иран
+//Посольство РУз в Исламской Республике Иран
 elchiRu(
   "btn_ru_81",
   `Чрезвычайный и Полномочный Посол:\nАбдуллаев Баходир Баратович\n\nАдрес:\n№21, Nastaran St. Boostan St., Aqdasieh, Tehran\n\n☎️ 228-320-71\n☎️ 222-997-80\n☎️ 228-320-25\n\n🪙  www.uzbekembassy.ir, iran.mfa.uz\n\n📨 ir.uzembassy@mfa.uz`,
@@ -2213,7 +2284,7 @@ elchi(
   51.14753574638868,
   71.40046743916801
 );
-//Посольство Республики Узбекистан в Республике Казахстан
+//Посольство РУз в Республике Казахстан
 elchiRu(
   "btn_ru_82",
   `Чрезвычайный и Полномочный Посол:\nНиязходжаев Саидикрам Пархатович\n\nАдрес:\n010000, г.Астана, ул.Лайли-Мажнун, д.7\n\n☎️ 295-42-52\n\n🪙 www.uzembassy.kz, kazakhstan.mfa.uz\n\n📨 kz.uzembassy@mfa.uz`,
@@ -2228,7 +2299,7 @@ elchi(
   39.94287144608594,
   116.45153499785474
 );
-//Посольство Республики Узбекистан в Китайской Народной Республике
+//Посольство РУз в Китайской Народной Республике
 elchiRu(
   "btn_ru_83",
   `Чрезвычайный и Полномочный Посол:\nАрзиев Фарход Нуриддинович\n\nАдрес:\n11 Bei Xiao Jie San Li Tun Beijing, 100600, China\n\n☎️ 653-263-05\n☎️ 653-225-51\n\n🪙 http://china.mfa.uz\n\n📨 presscenter@uzembchina.com`,
@@ -2243,7 +2314,7 @@ elchi(
   37.53488972591446,
   127.00167499778397
 );
-//Посольство Республики Узбекистан в Республике Корея
+//Посольство РУз в Республике Корея
 elchiRu(
   "btn_ru_84",
   `Чрезвычайный и Полномочный Посол:\nФен Виталий Васильевич\n\nАдрес:\n27, Daesagwan-ro 11-gil, Yongsan-gu, Seoul, Republic of Korea\n\n☎️ 574-65-54\n☎️ 577-36-60\n\n🪙 www.uzbekistan.or.kr, korea.mfa.uz\n\n📨 info@uzbekistan.or.kr`,
@@ -2258,7 +2329,7 @@ elchi(
   29.2869839459442,
   48.072332168735
 );
-//Посольство Республики Узбекистан в Государстве Кувейт
+//Посольство РУз в Государстве Кувейт
 elchiRu(
   "btn_ru_85",
   `Чрезвычайный и Полномочный Посол:\nАълоев Бахромжон Журабоевич\n\nАдрес:\nЭль-Кувейт, Мишреф, блок-1, улица- 7, дом № 4 .\n\n☎️ 2539-65-15\n\n🪙 http://kuwait.mfa.uz/ \n\n📨 kw.uzembassy@mfa.uz`,
@@ -2273,7 +2344,7 @@ elchi(
   42.83321853615102,
   74.58426898019441
 );
-//Посольство Республики Узбекистан в Кыргызской Республике
+//Посольство РУз в Кыргызской Республике
 elchiRu(
   "btn_ru_86",
   `Чрезвычайный и Полномочный Посол:\nМирзахидов Хуршид Мирсобирович\n\nАдрес:\n720044, г.Бишкек, ул.Чингиза Айтматова, 177.\n\n☎️ 98-62-95\n\n🪙 kyrgyzstan.mfa.uz \n\n📨 uzbembish@elcat.kg`,
@@ -2288,7 +2359,7 @@ elchi(
   56.95594598795114,
   24.115083456267758
 );
-//Посольство Республики Узбекистан в Латвийской Республике
+//Посольство РУз в Латвийской Республике
 elchiRu(
   "btn_ru_87",
   `Чрезвычайный и Полномочный Посол:\nСултанов Кадамбай Шарипович\n\nАдрес:\nRiga, LV-1010. 11-11 Elizabetes Str.\n\n☎️ 67322424\n☎️ 67322306\n\n🪙 www.uzbekistan.lv, latvia.mfa.uz \n\n📨 embassy@uzbekistan.lv, consulate@uzbekistan.lv.`,
@@ -2303,7 +2374,7 @@ elchi(
   3.1544418360886914,
   101.75415867153502
 );
-//Посольство Республики Узбекистан в Малайзии
+//Посольство РУз в Малайзии
 elchiRu(
   "btn_ru_88",
   `Чрезвычайный и Полномочный Посол:\nУсманов Равшан Аброрович\n\nАдрес:\nNo.7, Jalan 6, Ampang Utama, 68000 Ampang, Selangor, Malaysia\n\n☎️ 4253-2406\n☎️ 4253-3406\n\n🪙 malaysia.mfa.uz \n\n📨 secretary@uzbekembassy.com.my, consul@uzbekembassy.com.my`,
@@ -2318,7 +2389,7 @@ elchi(
   24.444278994513944,
   54.41455238211567
 );
-//Посольство Республики Узбекистан в Объединённых Арабских Эмиратах
+//Посольство РУз в Объединённых Арабских Эмиратах
 elchiRu(
   "btn_ru_89",
   `Чрезвычайный и Полномочный Посол:\nВакант\n\nАдрес:\nP.O.Box 111446,  Zone Est 38/1, Muroor Area, Plot #10/Villa 37, Abu-Dhabi\n\n☎️ 448-82-15\n☎️ 448-82-17\n\n🪙 uae.mfa.uz\n\n📨 uzbekembassy@uzbekembassy.ae`,
@@ -2333,7 +2404,7 @@ elchi(
   33.71875988797603,
   73.03812025664149
 );
-//Посольство Республики Узбекистан в Исламской Республике Пакистан
+//Посольство РУз в Исламской Республике Пакистан
 elchiRu(
   "btn_ru_90",
   `Чрезвычайный и Полномочный Посол:\nУсманов Ойбек Арифбекович\n\nАдрес:\nHouse №40, Street Khayaban-e-Iqbal, Sector F-8/3, Islamabad\n\n☎️ 226-47-46\n☎️ 285-27-68\n\n🪙 pakistan.mfa.uz\n\n📨 uzbekembassy@gmail.com`,
@@ -2348,7 +2419,7 @@ elchi(
   52.150767691925665,
   21.024463453530476
 );
-//Посольство Республики Узбекистан в Республике Польша
+//Посольство РУз в Республике Польша
 elchiRu(
   "btn_ru_91",
   `Чрезвычайный и Полномочный Посол:\nБабаев Бахром Джалалович\n\n Адрес: \n21, Kraski Str., Warsaw\n\n☎️ 894-62-30\n\n🪙 www.uzbekistan.pl, poland.mfa.uz\n\n📨 uzembassy@gmail.com`,
@@ -2363,7 +2434,7 @@ elchi(
   55.73268098285613,
   37.62100169840296
 );
-//Посольство Республики Узбекистан в Российской Федерации
+//Посольство РУз в Российской Федерации
 elchiRu(
   "btn_ru_92",
   `Чрезвычайный и Полномочный Посол:\nАсадов Ботиржон Закирович\n\nАдрес:\n119017, г. Москва, Погорельский переулок, д.12.\n\n☎️ 230-00-78\n☎️ 230-00-76 \n☎️ 755-89-46\n☎️ 296-07-26\n\n🪙 www.uzembassy.ru\n\n📨 info@uzembassy.ru`,
@@ -2378,7 +2449,7 @@ elchi(
   24.708759276381418,
   46.70206392630878
 );
-//Посольство Республики Узбекистан в Королевстве Саудовская Аравия
+//Посольство РУз в Королевстве Саудовская Аравия
 elchiRu(
   "btn_ru_93",
   `Чрезвычайный и Полномочный Посол:\nМаксудов Улугбек Хамиджанович\n\nАдрес:\nP.O. Box 94008 Riyadh 11693, Riyadh city, area Sulaimania, Talha bin Al Barra str. Villa №17, Saudi Arabia\n\n☎️ 263-52-23\n\n🪙 uzbekistan.sa, ksa.mfa.uz.\n\n📨 uzbembriyadh@gmail.com`,
@@ -2393,7 +2464,7 @@ elchi(
   1.3009625881565763,
   103.84276539722717
 );
-//Посольство Республики Узбекистан в Республике Сингапур
+//Посольство РУз в Республике Сингапур
 elchiRu(
   "btn_ru_94",
   `Чрезвычайный и Полномочный Посол:\nШакиров Кахрамон Абдуганиевич\n\nАдрес:\n20 Kramat Lane, United House # 04-01/02, Singapore 228773\n\n☎️ 6734-39-42/43  \n\n🪙  singapore.mfa.uz, uzembassy.sg\n\n📨 office@uzembassy.sg`,
@@ -2408,7 +2479,7 @@ elchi(
   38.90852735256902,
   -77.0395766934884
 );
-//Посольство Республики Узбекистан в Соединенных Штатах Америки
+//Посольство РУз в Соединенных Штатах Америки
 elchiRu(
   "btn_ru_95",
   `Чрезвычайный и Полномочный Посол:\nВахабов Жавлон Абдужалолович\n\nАдрес:\n1746 Massachusetts Avenue, North West, Washington DC, 20036, USA\n\n☎️ 887-53-00\n☎️ 251-82-98  \n\n🪙  www.uzbekistan.org\n\n📨 info@uzbekistan.org`,
@@ -2423,7 +2494,7 @@ elchi(
   38.60130121157151,
   68.78445636049167
 );
-//Посольство Республики Узбекистан в Республике Таджикистан
+//Посольство РУз в Республике Таджикистан
 elchiRu(
   "btn_ru_96",
   `Чрезвычайный и Полномочный Посол:\nШаисматов Эргаш Рахматуллаевич\n\nАдрес:\n734003, Душанбе, ул. Санои, 30\n\n☎️ 224-75-39\n☎️ 224-75-42\n\n🪙 uzbekistan.tj, tajikistan.mfa.uz\n\n📨 ruzintaj@rambler.ru, embasuzbek@gmail.com, uzbekistantj@yandex.ru`,
@@ -2438,7 +2509,7 @@ elchi(
   39.87248206619246,
   32.86392204571917
 );
-//Посольство Республики Узбекистан в Турецкой Республике
+//Посольство РУз в Турецкой Республике
 elchiRu(
   "btn_ru_97",
   `Чрезвычайный и Полномочный Посол:\nАгзамходжаев Алишер Анварович\n\nАдрес:\n006550, Sancak Mah., 549 Sokak, № 3, Yıldız - Çankaya, Ankara\n\n☎️ 441-38-71\n☎️ 441-17-46\n\n🪙 www.uzembassy.org.tr, turkey.mfa.uz.\n\n📨 uzbekistanemb@gmail.com,  uzconsul.ankara@gmail.com`,
@@ -2453,7 +2524,7 @@ elchi(
   37.944395783753,
   58.35945449723727
 );
-//Посольство Республики Узбекистан в Туркменистане
+//Посольство РУз в Туркменистане
 elchiRu(
   "btn_ru_98",
   `Чрезвычайный и Полномочный Посол:\nКучкаров Акмалжон Артикович\n\nАдрес:\nг. Ашхабод, ул. Героглы, дом 50А\n\n☎️ 36-90-55\n\n🪙 turkmenistan.mfa.uz\n\n📨 embashgabat@yahoo.com `,
@@ -2468,7 +2539,7 @@ elchi(
   50.454925295726774,
   30.516991797646273
 );
-//Посольство Республики Узбекистан в Украине
+//Посольство РУз в Украине
 elchiRu(
   "btn_ru_99",
   `Чрезвычайный и Полномочный Посол:\nКурманов Алишер Анварович\n\nАдрес:\nул. Владимирская, 16, г. Киев, Украина, 01901А\n\n☎️ 501-50-00\n☎️  501-41-82\n☎️ 501-41-83 \n\n🪙 www.uzbekistan.org.ua, ukraine.mfa.uz\n\n📨 embassy@uzbekistan.org.ua `,
@@ -2483,7 +2554,7 @@ elchi(
   48.8710347216855,
   2.3200317251341303
 );
-//Посольство Республики Узбекистан во Французской Республике
+//Посольство РУз во Французской Республике
 elchiRu(
   "btn_ru_100",
   `Чрезвычайный и Полномочный Посол:\nРустамбаев Сардор Мирзаюсупович\n\nАдрес:\n22 rue d’Aguesseau 75008 Paris\n\n☎️ 53-30-03-53 \n\n🪙 www.ouzbekistan.fr, france.mfa.uz\n\n📨 contact@ouzbekistan.fr. `,
@@ -2498,7 +2569,7 @@ elchi(
   52.53476699810613,
   13.355841434503855
 );
-//Посольство Республики Узбекистан в Федеративной Республике Германия
+//Посольство РУз в Федеративной Республике Германия
 elchiRu(
   "btn_ru_101",
   `Чрезвычайный и Полномочный Посол:\nКасимов Набижон Садикджанович\n\nАдрес:\nPerleberger Strasse 62, Berlin 10559\n\n☎️ 394-09-80\n\n🪙 www.uzbekistan.de, germany.mfa.uz.\n\n📨 botschaft@uzbekistan.de`,
@@ -2513,7 +2584,7 @@ elchi(
   35.639651217065186,
   139.73707066889529
 );
-//Посольство Республики Узбекистан в Японии
+//Посольство РУз в Японии
 elchiRu(
   "btn_ru_102",
   `Чрезвычайный и Полномочный Посол:\nАбдурахмонов Мухсинхужа Турсунхуджаевич\n\nАдрес:\n108-0074 Tokyo, Minаto-ku, Takanawa 2-1-52\n\n☎️ 6277-21-66\n☎️ 1273-49-00\n\n🪙 uzbekistan.jp, japan.mfa.uz, \n\n📨 info@uzbekistan.jp`,
@@ -2528,7 +2599,7 @@ elchi(
   23.607492865600403,
   58.44952401123378
 );
-//Посольство Республики Узбекистан в Султанате Оман
+//Посольство РУз в Султанате Оман
 elchi(
   "btn_ru_103",
   `Чрезвычайный и Полномочный Посол:\nВакант\n\nАдрес:\nг.Маскат, Шатти Курм, улица 3048, вилла 3900\n\n☎️ 79-481-814\n☎️ 79-481-815\n\n🪙 oman.mfa.uz \n\n📨 uzembassyinoman@gmail.com`,
@@ -2540,216 +2611,217 @@ elchi(
 bot.action("btn_uz_8", async (ctx) => {
   try {
     await ctx.deleteMessage();
+    
     await bot.telegram.sendMessage(ctx.chat.id, "🇺🇿 O`zbekcha", {
       reply_markup: {
         inline_keyboard: [
           [
             {
-              text: "O'zb Res Avstriya Respublikasidagi elchixonasi",
+              text: "🇦🇹 O'zb Res Avstriya Respublikasidagi elchixonasi",
               callback_data: "btn_uz_69",
             },
           ],
           [
             {
-              text: "O'zb Res Ozarbayjon Respublikasidagi elchixonasi",
+              text: "🇦🇿 O'zb Res Ozarbayjon Respublikasidagi elchixonasi",
               callback_data: "btn_uz_70",
             },
           ],
           [
             {
-              text: "O'zb Res Afg‘onistondagi elchixonasi",
+              text: "🇦🇫 O'zb Res Afg‘onistondagi elchixonasi",
               callback_data: "btn_uz_71",
             },
           ],
           [
             {
-              text: "O'zb Res Belarus Respublikasidagi Elchixonasi",
+              text: "🇧🇾 O'zb Res Belarus Respublikasidagi Elchixonasi",
               callback_data: "btn_uz_72",
             },
           ],
           [
             {
-              text: "O'zb Res Belgiya Qirolligidagi elchixonasi",
+              text: "🇧🇪 O'zb Res Belgiya Qirolligidagi elchixonasi",
               callback_data: "btn_uz_73",
             },
           ],
           [
             {
-              text: "O'zb Res Buyuk Britaniya va Shimoliy Irlandiya Birlashgan Qirolligidagi elchixonasi",
+              text: "🇮🇪 🇬🇧 O'zb Res Buyuk Britaniya va Shimoliy Irlandiya Birlashgan Qirolligidagi elchixonasi",
               callback_data: "btn_uz_74",
             },
           ],
           [
             {
-              text: "O'zb Res Misr Arab Respublikasidagi elchixonasi",
+              text: "🇪🇬 O'zb Res Misr Arab Respublikasidagi elchixonasi",
               callback_data: "btn_uz_75",
             },
           ],
           [
             {
-              text: "O'zb Res Ispaniya Qirolligidagi elchixonasi",
+              text: "🇪🇸 O'zb Res Ispaniya Qirolligidagi elchixonasi",
               callback_data: "btn_uz_76",
             },
           ],
           [
             {
-              text: "O'zb Res Italiya Respublikasidagi elchixonasi",
+              text: "🇮🇹 O'zb Res Italiya Respublikasidagi elchixonasi",
               callback_data: "btn_uz_77",
             },
           ],
           [
             {
-              text: "O'zb Res Isroil Davlatidagi elchixonasi",
+              text: "🇮🇱 O'zb Res Isroil Davlatidagi elchixonasi",
               callback_data: "btn_uz_78",
             },
           ],
           [
             {
-              text: "O'zb Res Hindiston Respublikasidagi elchixonasi",
+              text: "🇮🇳 O'zb Res Hindiston Respublikasidagi elchixonasi",
               callback_data: "btn_uz_79",
             },
           ],
           [
             {
-              text: "O'zb Res Indoneziya Respublikasidagi elchixonasi",
+              text: "🇮🇩 O'zb Res Indoneziya Respublikasidagi elchixonasi",
               callback_data: "btn_uz_80",
             },
           ],
           [
             {
-              text: "O'zb Res Eron Islom Respublikasidagi elchixonasi",
+              text: "🇮🇷 O'zb Res Eron Islom Respublikasidagi elchixonasi",
               callback_data: "btn_uz_81",
             },
           ],
           [
             {
-              text: "O'zb Res Qozog‘iston Respublikasidagi elchixonasi",
+              text: "🇰🇿 O'zb Res Qozog‘iston Respublikasidagi elchixonasi",
               callback_data: "btn_uz_82",
             },
           ],
           [
             {
-              text: "O'zb Res Xitoy Xalq Respublikasidagi elchixonasi",
+              text: "🇨🇳 O'zb Res Xitoy Xalq Respublikasidagi elchixonasi",
               callback_data: "btn_uz_83",
             },
           ],
           [
             {
-              text: "O'zb Res Koreya Respublikasidagi elchixonasi",
+              text: "🇰🇵 🇰🇷 O'zb Res Koreya Respublikasidagi elchixonasi",
               callback_data: "btn_uz_84",
             },
           ],
           [
             {
-              text: "O'zb Res Kuvayt Davlatidagi elchixonasi",
+              text: "🇰🇼 O'zb Res Kuvayt Davlatidagi elchixonasi",
               callback_data: "btn_uz_85",
             },
           ],
           [
             {
-              text: "O'zb Res Qirg‘iziston Respublikasidagi elchixonasi",
+              text: "🇰🇬 O'zb Res Qirg‘iziston Respublikasidagi elchixonasi",
               callback_data: "btn_uz_86",
             },
           ],
           [
             {
-              text: "O'zb Res Latviya Respublikasidagi elchixonasi",
+              text: "🇱🇻 O'zb Res Latviya Respublikasidagi elchixonasi",
               callback_data: "btn_uz_87",
             },
           ],
           [
             {
-              text: "O'zb Res Malayziyadagi elchixonasi",
+              text: "🇲🇾 O'zb Res Malayziyadagi elchixonasi",
               callback_data: "btn_uz_88",
             },
           ],
           [
             {
-              text: "O'zb Res Birlashgan Arab Amirliklaridagi elchixonasi",
+              text: "🇦🇪 O'zb Res Birlashgan Arab Amirliklaridagi elchixonasi",
               callback_data: "btn_uz_89",
             },
           ],
           [
             {
-              text: "O'zbekiston Respublikasining Pokiston Islom Respublikasidagi elchixonasi",
+              text: "🇵🇰 O'zb Res Pokiston Islom Respublikasidagi elchixonasi",
               callback_data: "btn_uz_90",
             },
           ],
           [
             {
-              text: "O'zb Res Polsha Respublikasidagi elchixonasi",
+              text: "🇵🇱 O'zb Res Polsha Respublikasidagi elchixonasi",
               callback_data: "btn_uz_91",
             },
           ],
           [
             {
-              text: "O'zb Res Rossiya Federatsiyasidagi elchixonasi",
+              text: "🇷🇺 O'zb Res Rossiya Federatsiyasidagi elchixonasi",
               callback_data: "btn_uz_92",
             },
           ],
           [
             {
-              text: "O'zb Res Saudiya Arabistoni Podshohligidagi elchixonasi",
+              text: "🇸🇦 O'zb Res Saudiya Arabistoni Podshohligidagi elchixonasi",
               callback_data: "btn_uz_93",
             },
           ],
           [
             {
-              text: "O'zb Res Singapurdagi elchixonasi",
+              text: "🇸🇬 O'zb Res Singapurdagi elchixonasi",
               callback_data: "btn_uz_94",
             },
           ],
           [
             {
-              text: "O'zb Res Amerika Qo‘shma Shtatlaridagi elchixonasi",
+              text: "🇺🇸 O'zb Res Amerika Qo‘shma Shtatlaridagi elchixonasi",
               callback_data: "btn_uz_95",
             },
           ],
           [
             {
-              text: "O'zb Res Tojikiston Respublikasidagi elchixonasi",
+              text: "🇹🇯 O'zb Res Tojikiston Respublikasidagi elchixonasi",
               callback_data: "btn_uz_96",
             },
           ],
           [
             {
-              text: "O'zb Res Turkiya Respublikasidagi elchixonasi",
+              text: "🇹🇷 O'zb Res Turkiya Respublikasidagi elchixonasi",
               callback_data: "btn_uz_97",
             },
           ],
           [
             {
-              text: "O'zb Res Turkmanistondagi elchixonasi",
+              text: "🇹🇲 O'zb Res Turkmanistondagi elchixonasi",
               callback_data: "btn_uz_98",
             },
           ],
           [
             {
-              text: "O'zb Res Ukrainadagi elchixonasi",
+              text: "🇺🇦 O'zb Res Ukrainadagi elchixonasi",
               callback_data: "btn_uz_99",
             },
           ],
           [
             {
-              text: "O'zb Res Fransiya Respublikasidagi elchixonasi",
+              text: "🇫🇷 O'zb Res Fransiya Respublikasidagi elchixonasi",
               callback_data: "btn_uz_100",
             },
           ],
           [
             {
-              text: "O'zb Res Germaniya Federativ Respublikasidagi elchixonasi",
+              text: "🇩🇪 O'zb Res Germaniya Federativ Respublikasidagi elchixonasi",
               callback_data: "btn_uz_101",
             },
           ],
           [
             {
-              text: "O'zb Res Yaponiyadagi elchixonasi",
+              text: "🇯🇵 O'zb Res Yaponiyadagi elchixonasi",
               callback_data: "btn_uz_102",
             },
           ],
           [
             {
-              text: "O'zb Res O‘mon Sultonligidagi elchixonasi",
+              text: "🇴🇲 O'zb Res O‘mon Sultonligidagi elchixonasi",
               callback_data: "btn_uz_103",
             },
           ],
@@ -2761,10 +2833,6 @@ bot.action("btn_uz_8", async (ctx) => {
         ],
       },
     });
-
-    await ctx.replyWithHTML("Elchixona", {
-      disable_web_page_preview: true,
-    });
   } catch (error) {
     console.error(error);
   }
@@ -2774,216 +2842,217 @@ bot.action("btn_uz_8", async (ctx) => {
 bot.action("btn_ru_8", async (ctx) => {
   try {
     await ctx.deleteMessage();
+    
     await bot.telegram.sendMessage(ctx.chat.id, "🇷🇺 Русский", {
       reply_markup: {
         inline_keyboard: [
           [
             {
-              text: "Посольство Республики Узбекистан в Австрийской Республике",
+              text: "🇦🇹 Посольство РУз в Австрийской Республике",
               callback_data: "btn_ru_69",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Азербайджанской Республике",
+              text: "🇦🇿 Посольство РУз в Азербайджанской Республике",
               callback_data: "btn_ru_70",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Афганистане",
+              text: "🇦🇫 Посольство РУз в Афганистане",
               callback_data: "btn_ru_71",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Республике Беларусь",
+              text: "🇧🇾 Посольство РУз в Республике Беларусь",
               callback_data: "btn_ru_72",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Королевстве Бельгия",
+              text: "🇧🇪 Посольство РУз в Королевстве Бельгия",
               callback_data: "btn_ru_73",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Соединенном Королевстве Великобритании и Северной Ирландии",
+              text: "🇮🇪 🇬🇧 Посольство РУз в Соединенном Королевстве Великобритании и Северной Ирландии",
               callback_data: "btn_ru_74",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Арабской Республике Египет",
+              text: "🇪🇬 Посольство РУз в Арабской Республике Египет",
               callback_data: "btn_ru_75",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Королевстве Испания",
+              text: "🇪🇸 Посольство РУз в Королевстве Испания",
               callback_data: "btn_ru_76",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Итальянской Республике",
+              text: "🇮🇹 Посольство РУз в Итальянской Республике",
               callback_data: "btn_ru_77",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Государстве Израиль",
+              text: "🇮🇱 Посольство РУз в Государстве Израиль",
               callback_data: "btn_ru_78",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Республике Индия",
+              text: "🇮🇳 Посольство РУз в Республике Индия",
               callback_data: "btn_ru_79",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Республике Индонезия",
+              text: "🇮🇩 Посольство РУз в Республике Индонезия",
               callback_data: "btn_ru_80",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Исламской Республике Иран",
+              text: "🇮🇷 Посольство РУз в Исламской Республике Иран",
               callback_data: "btn_ru_81",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Республике Казахстан",
+              text: "🇰🇿 Посольство РУз в Республике Казахстан",
               callback_data: "btn_ru_82",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Китайской Народной Республике",
+              text: "🇨🇳 Посольство РУз в Китайской Народной Республике",
               callback_data: "btn_ru_83",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Республике Корея",
+              text: "🇰🇵 🇰🇷 Посольство РУз в Республике Корея",
               callback_data: "btn_ru_84",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Государстве Кувейт",
+              text: "🇰🇼 Посольство РУз в Государстве Кувейт",
               callback_data: "btn_ru_85",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Кыргызской Республике",
+              text: "🇰🇬 Посольство РУз в Кыргызской Республике",
               callback_data: "btn_ru_86",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Латвийской Республике",
+              text: "🇱🇻 Посольство РУз в Латвийской Республике",
               callback_data: "btn_ru_87",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Малайзии",
+              text: "🇲🇾 Посольство РУз в Малайзии",
               callback_data: "btn_ru_88",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Объединённых Арабских Эмиратах",
+              text: "🇦🇪 Посольство РУз в Объединённых Арабских Эмиратах",
               callback_data: "btn_ru_89",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Исламской Республике Пакистан",
+              text: "🇵🇰 Посольство РУз в Исламской Республике Пакистан",
               callback_data: "btn_ru_90",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Республике Польша",
+              text: "🇵🇱 Посольство РУз в Республике Польша",
               callback_data: "btn_ru_91",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Российской Федерации",
+              text: "🇷🇺 Посольство РУз в Российской Федерации",
               callback_data: "btn_ru_92",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Королевстве Саудовская Аравия",
+              text: "🇸🇦 Посольство РУз в Королевстве Саудовская Аравия",
               callback_data: "btn_ru_93",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Республике Сингапур",
+              text: "🇸🇬 Посольство РУз в Республике Сингапур",
               callback_data: "btn_ru_94",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Соединенных Штатах Америки",
+              text: "🇺🇸 Посольство РУз в Соединенных Штатах Америки",
               callback_data: "btn_ru_95",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Республике Таджикистан",
+              text: "🇹🇯 Посольство РУз в Республике Таджикистан",
               callback_data: "btn_ru_96",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Турецкой Республике",
+              text: "🇹🇷 Посольство РУз в Турецкой Республике",
               callback_data: "btn_ru_97",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Туркменистане",
+              text: "🇹🇲 Посольство РУз в Туркменистане",
               callback_data: "btn_ru_98",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Украине",
+              text: "🇺🇦 Посольство РУз в Украине",
               callback_data: "btn_ru_99",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан во Французской Республике",
+              text: "🇫🇷 Посольство РУз во Французской Республике",
               callback_data: "btn_ru_100",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Федеративной Республике Германия",
+              text: "🇩🇪 Посольство РУз в Федеративной Республике Германия",
               callback_data: "btn_ru_101",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Японии",
+              text: "🇯🇵 Посольство РУз в Японии",
               callback_data: "btn_ru_102",
             },
           ],
           [
             {
-              text: "Посольство Республики Узбекистан в Султанате Оман",
+              text: "🇴🇲 Посольство РУз в Султанате Оман",
               callback_data: "btn_ru_103",
             },
           ],
@@ -3007,12 +3076,12 @@ bot.action("btn_uz_7", async (ctx) => {
       reply_markup: {
         inline_keyboard: [
           [
-            { text: "Rossiya Federatsiyasi", callback_data: "btn_uz_31" },
-            { text: "Koreya Respublikasi", callback_data: "btn_uz_32" },
+            { text: "🇷🇺 Rossiya Federatsiyasi", callback_data: "btn_uz_31" },
+            { text: "🇰🇷 Koreya Respublikasi", callback_data: "btn_uz_32" },
           ],
           [
-            { text: "Turkiya Respublikasi", callback_data: "btn_uz_39" },
-            { text: "Qozog`iston Respublikasi", callback_data: "btn_uz_40" },
+            { text: "🇹🇷 Turkiya Respublikasi", callback_data: "btn_uz_39" },
+            { text: "🇰🇿 Qozog`iston Respublikasi", callback_data: "btn_uz_40" },
           ],
           [
             { text: "🏠 Bosh sahifa", callback_data: "btn_uz_3" },
@@ -3033,12 +3102,12 @@ bot.action("btn_ru_7", async (ctx) => {
       reply_markup: {
         inline_keyboard: [
           [
-            { text: "Российская Федерация", callback_data: "btn_ru_31" },
-            { text: "Республика Корея", callback_data: "btn_ru_32" },
+            { text: "🇷🇺 Российская Федерация", callback_data: "btn_ru_31" },
+            { text: "🇰🇷 Республика Корея", callback_data: "btn_ru_32" },
           ],
           [
-            { text: "Республика Турция", callback_data: "btn_ru_39" },
-            { text: "Республика Казахстан", callback_data: "btn_ru_40" },
+            { text: "🇹🇷 Республика Турция", callback_data: "btn_ru_39" },
+            { text: "🇰🇿 Республика Казахстан", callback_data: "btn_ru_40" },
           ],
           [
             { text: "🏠 Главная страница", callback_data: "btn_ru_3" },
@@ -3661,7 +3730,7 @@ bot.action("btn_uz_11", async (ctx) => {
             },
           ],
           [
-            { text: "🖥  Bog`lanish ☎️", callback_data: "btn_uz_5" },
+            { text: "☎️ Bog`lanish ", callback_data: "btn_uz_5" },
             { text: "👷🏻‍♂️ Mehnat migrantlari uchun", callback_data: "btn_uz_2" },
           ],
 
@@ -3696,7 +3765,7 @@ bot.action("btn_ru_11", async (ctx) => {
           ],
 
           [
-            { text: "🖥  Связаться ☎️", callback_data: "btn_ru_5" },
+            { text: "☎️ Связаться", callback_data: "btn_ru_5" },
             { text: "👷🏻‍♂️ Для Мигрантов", callback_data: "btn_ru_2" },
           ],
           [
@@ -3715,7 +3784,7 @@ bot.action("btn_uz_5", async (ctx) => {
   try {
     await ctx.deleteMessage();
     // await ctx.telegram.sendContact(ctx.chat.id, +998712023355, "+998712023355")
-    await bot.telegram.sendMessage(ctx.chat.id, "🖥  Bog`lanish", {
+    await bot.telegram.sendMessage(ctx.chat.id, "☎️  Bog`lanish", {
       reply_markup: {
         inline_keyboard: [
           [
@@ -3738,7 +3807,7 @@ bot.action("btn_uz_5", async (ctx) => {
 bot.action("btn_ru_5", async (ctx) => {
   try {
     ctx.deleteMessage();
-    await bot.telegram.sendMessage(ctx.chat.id, "🖥  Связаться", {
+    await bot.telegram.sendMessage(ctx.chat.id, "☎️ Связаться", {
       reply_markup: {
         inline_keyboard: [
           [
@@ -3776,7 +3845,7 @@ bot.action("btn_uz_12", async (ctx) => {
             },
           ],
           [
-            { text: "🖥  Bog`lanish ☎️", callback_data: "btn_uz_5" },
+            { text: "☎️ Bog`lanish", callback_data: "btn_uz_5" },
             { text: "👷🏻‍♂️ Mehnat migrantlari uchun", callback_data: "btn_uz_2" },
           ],
 
@@ -3811,7 +3880,7 @@ bot.action("btn_ru_12", async (ctx) => {
           ],
 
           [
-            { text: "🖥  Связаться ☎️", callback_data: "btn_ru_5" },
+            { text: "☎️ Связаться", callback_data: "btn_ru_5" },
             { text: "👷🏻‍♂️ Для Мигрантов", callback_data: "btn_ru_2" },
           ],
           [
