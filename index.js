@@ -2661,7 +2661,7 @@ bot.action("btn_uz_8", async (ctx) => {
           ],
           [
             {
-              text: "🇮🇪 🇬🇧 O'zb Res Buyuk Britaniya va Shimoliy Irlandiya Birlashgan Qirolligidagi elchixonasi",
+              text: "🇬🇧 O'zb Res Buyuk Britaniya va Shimoliy Irlandiya Birlashgan Qirolligidagi elchixonasi",
               callback_data: "btn_uz_74",
             },
           ],
@@ -2892,7 +2892,7 @@ bot.action("btn_ru_8", async (ctx) => {
           ],
           [
             {
-              text: "🇮🇪 🇬🇧 Посольство РУз в Соединенном Королевстве Великобритании и Северной Ирландии",
+              text: "🇬🇧 Посольство РУз в Соединенном Королевстве Великобритании и Северной Ирландии",
               callback_data: "btn_ru_74",
             },
           ],
