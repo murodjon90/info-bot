@@ -1,8 +1,7 @@
-const { Telegraf, Markup, Telegram } = require("telegraf");
+const { Telegraf } = require("telegraf");
 require("dotenv").config();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
-const telegram = new Telegram(process.env.BOT_TOKEN);
 
 bot.start(async (ctx) => {
   
@@ -148,28 +147,6 @@ bot.action("btn_ru_cur", async (ctx) => {
   }
 });
 
-// function what(btn) {
-//   if (btn!=='btn_uz_mes' || btn!=='btn_ru_mes') {
-//     bot.on('text', async(ctx)=>{
-//       try {
-//         await ctx.deleteMessage();
-//         await bot.telegram.sendMessage(ctx.chat.id, "🧐", {
-//           reply_markup: {
-//             inline_keyboard: [
-//               [
-//                 { text: "⬅️⬅️⬅️⬅️⬅️", callback_data: btn }
-//               ],
-//             ]
-//           }
-//         })
-        
-//       } catch (error) {
-//         console.error(error);
-//       }
-//     })
-//   }
-// }
-
 // Xabar berish
 bot.action("btn_uz_mes", async (ctx) => {
   try {
@@ -183,37 +160,33 @@ bot.action("btn_uz_mes", async (ctx) => {
   bot.on("text", async (ctx) => {
     try {
       await ctx.deleteMessage();
-      await ctx.reply(`${JSON.stringify(ctx.update.message.text)}`);
+      await bot.telegram.sendMessage(1376973624, `username: @${ctx.from.username}\n\n${ctx.from.first_name} ${ctx.from.last_name} fuqarodan xabar keldi\n\nXabar mazmuni\n\n${ctx.update.message.text}`, {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "⬅️ Ortga qaytish", callback_data: "start" }],
+          ],
+        },
+      })
+      await bot.telegram.sendMessage(369531927, `username: @${ctx.from.username}\n\n${ctx.from.first_name} ${ctx.from.last_name} fuqarodan ariza keldi\n\nAriza mazmuni\n\n${ctx.update.message.text}`, {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "⬅️ Ortga qaytish", callback_data: "start" }],
+          ],
+        },
+      })
+      await bot.telegram.sendMessage(ctx.chat.id, `Arazangiz qabul qilindi`, {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "⬅️ Ortga qaytish", callback_data: "start" }],
+          ],
+        },
+      }); 
       
-      await bot.telegram.sendMessage(369531927, `${ctx.from.first_name} ${ctx.from.last_name} fuqarodan ariza keldi\n\nAriza mazmuni\n\n${ctx.update.message.text}`, {
-        reply_markup: {
-          inline_keyboard: [
-            [{ text: "⬅️ Ortga qaytish", callback_data: "start" }],
-          ],
-        },
-      })
-      await bot.telegram.sendMessage(1376973624, `Fuqarodan ariza keldi\n\nAriza mazmuni\n\n${ctx.update.message.text}`, {
-        reply_markup: {
-          inline_keyboard: [
-            [{ text: "⬅️ Ortga qaytish", callback_data: "start" }],
-          ],
-        },
-      })
-      await bot.telegram.sendMessage(
-        ctx.chat.id,
-        `Arazangiz qabul qilindi`,
-        {
-          reply_markup: {
-            inline_keyboard: [
-              [{ text: "⬅️ Ortga qaytish", callback_data: "start" }],
-            ],
-          },
-        }
-      );
     } catch (error) {
       console.error(error);
     }
   });
+  
 });
 
 // Сообщить
@@ -221,39 +194,38 @@ bot.action("btn_ru_mes", async (ctx) => {
   try {
     await ctx.deleteMessage();
     await ctx.reply("Оставьте сообщение....");
-    
   } catch (error) {
     console.error(error);
   }
+  
   bot.on("text", async (ctx) => {
     try {
       await ctx.deleteMessage();
-      await ctx.reply(`${JSON.stringify(ctx.update.message.text)}`);
-      await bot.telegram.sendMessage(369531927, `${ctx.from.first_name} ${ctx.from.last_name}\n${ctx.update.message.text}`, {
+      await ctx.reply(`Ваша Заявка прията`,{
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "⬅️Назад", callback_data: "start" }],
+          ],
+        },
+      });
+      await bot.telegram.sendMessage(1376973624, `Username: @${ctx.from.username}\n\nЗаявка пришла от ${ctx.from.first_name} ${ctx.from.last_name}\n\n${ctx.update.message.text}`, {
         reply_markup: {
           inline_keyboard: [
             [{ text: "⬅️Назад", callback_data: "start" }],
           ],
         },
       })
-      await bot.telegram.sendMessage(1376973624, `Заява пришла`, {
+      await bot.telegram.sendMessage(369531927, `Username: @${ctx.from.username}\n\n${ctx.from.first_name} ${ctx.from.last_name}\n${ctx.update.message.text}`, {
         reply_markup: {
           inline_keyboard: [
             [{ text: "⬅️Назад", callback_data: "start" }],
           ],
         },
       })
-      await bot.telegram.sendMessage(
-        ctx.chat.id,
-        `Ваша Заявка прията`,
-        {
-          reply_markup: {
-            inline_keyboard: [
-              [{ text: "⬅️Назад", callback_data: "start" }],
-            ],
-          },
-        }
-      );
+      
+      
+      
+      
     } catch (error) {
       console.error(error);
     }
@@ -3144,12 +3116,12 @@ bot.action("btn_uz_39", async (ctx) => {
         inline_keyboard: [
           [
             { text: "Istanbul shahri", callback_data: "btn_uz_61" },
-            { text: "Bursa shahri", callback_data: "btn_uz_62" },
+            // { text: "Bursa shahri", callback_data: "btn_uz_62" },
           ],
-          [
-            { text: "Izmir shahri", callback_data: "btn_uz_63" },
-            { text: "Antalya shahri", callback_data: "btn_uz_64" },
-          ],
+          // [
+          //   { text: "Izmir shahri", callback_data: "btn_uz_63" },
+          //   { text: "Antalya shahri", callback_data: "btn_uz_64" },
+          // ],
           [
             { text: "🏠 Bosh sahifa", callback_data: "btn_uz_3" },
             { text: "⬅️ Ortga qaytish", callback_data: "btn_uz_7" },
@@ -3170,12 +3142,12 @@ bot.action("btn_ru_39", async (ctx) => {
         inline_keyboard: [
           [
             { text: "Город Стамбул", callback_data: "btn_ru_61" },
-            { text: "Город Бурса", callback_data: "btn_ru_62" },
+            // { text: "Город Бурса", callback_data: "btn_ru_62" },
           ],
-          [
-            { text: "Город Измир", callback_data: "btn_ru_63" },
-            { text: "Город Анталья", callback_data: "btn_ru_64" },
-          ],
+          // [
+          //   { text: "Город Измир", callback_data: "btn_ru_63" },
+          //   { text: "Город Анталья", callback_data: "btn_ru_64" },
+          // ],
           [
             { text: "🏠 Главная страница", callback_data: "btn_ru_3" },
             { text: "⬅️ Назад", callback_data: "btn_ru_7" },
@@ -3258,7 +3230,7 @@ bot.action("btn_uz_40", async (ctx) => {
 // Республика Казахстан
 bot.action("btn_ru_40", async (ctx) => {
   try {
-    await ctx.deleteMessage();
+    await ctx.deleteMessage();  
     await bot.telegram.sendMessage(ctx.chat.id, "🇷🇺 Русский", {
       reply_markup: {
         inline_keyboard: [
@@ -3285,13 +3257,13 @@ bot.action("btn_ru_40", async (ctx) => {
 //Istanbul shahri
 turkiya(
   "btn_uz_61",
-  `Vakolatxona raxbari:\nvakant\n\nVakolatxona manzili:\nLevent, Lale ko'chasi №:8, 34460 Levent/Beshiktosh\n\n☎️ +90 (212) 323 2037\n\n📨: uzbekconsul@yahoo.com\n📨: joha772004@mail.ru `,
+  `TMMAning Turkiya Respublikasidagi vakili:\nMuxamedov Abduraxmon Abdug'ofurovich\n\nVakolatxona manzili:\nLevent, Lale ko'chasi №:8, 34460 Levent/Beshiktosh\n\n☎️ +90 507 477 53 17\n\n📨: uzbekconsul@yahoo.com\n📨: joha772004@mail.ru `,
   41.07742868462765,
   29.017352238066845
 );
 turkiyaRu(
   "btn_ru_61",
-  `Руководитель представительства:\nвакант\n\nАдрес представительства:\nЛевент чарси, улица Лале №:8, 34460 Левент/Бешикташ \n\n☎️ +90 (212) 323 2037\n\n📨: uzbekconsul@yahoo.com\n📨: joha772004@mail.ru`,
+  `Представитель АВТМ в Турецкой Республике:\nМухамедов Абдурахмон Абдугофурович\n\nАдрес представительства:\nЛевент чарси, улица Лале №:8, 34460 Левент/Бешикташ \n\n☎️ +90 507 477 53 17\n\n📨: uzbekconsul@yahoo.com\n📨: joha772004@mail.ru`,
   41.07742868462765,
   29.017352238066845
 );
@@ -3406,11 +3378,11 @@ bot.action("btn_uz_31", async (ctx) => {
           ],
           [
             { text: "Xabarovsk o`lkasi", callback_data: "btn_uz_57" },
-            { text: "Kamerov viloyati", callback_data: "btn_uz_58" },
+            { text: "Kamerovo viloyati", callback_data: "btn_uz_58" },
           ],
           [
             { text: "Udmurtiya Respublikasi", callback_data: "btn_uz_59" },
-            { text: "Nijegorod viloyati", callback_data: "btn_uz_60" },
+            { text: "Nijniy Novgorod viloyati", callback_data: "btn_uz_60" },
           ],
           [
             { text: "🏠 Bosh sahifa", callback_data: "btn_uz_3" },
@@ -3492,7 +3464,7 @@ bot.action("btn_ru_31", async (ctx) => {
           ],
           [
             { text: "Удмуртская Республика", callback_data: "btn_ru_59" },
-            { text: "Нижегородская область", callback_data: "btn_ru_60" },
+            { text: "Нижний Новгород область", callback_data: "btn_ru_60" },
           ],
           [
             { text: "🏠 Главная страница", callback_data: "btn_ru_3" },
@@ -3807,8 +3779,11 @@ bot.action("btn_uz_5", async (ctx) => {
               text: "Madadkor ",
               url: "https://www.facebook.com/madadkor.madadkorov",
             },
-            { text: "⬅️ Ortga qaytish", callback_data: "btn_uz_12" },
+            { text: "❓ Savol-javob", callback_data: "btn_uz_sj" },
           ],
+          [
+            { text: "⬅️ Ortga qaytish", callback_data: "btn_uz_12" },
+          ]
         ],
       },
     });
@@ -3817,6 +3792,26 @@ bot.action("btn_uz_5", async (ctx) => {
     console.error(error);
   }
 });
+
+// Savol javob
+bot.action('btn_uz_sj', async (ctx)=>{
+  try {
+    await ctx.deleteMessage();
+    await bot.telegram.sendMessage(ctx.chat.id, "☎️ Bog`lanish", {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            { text: "⬅️ Ortga qaytish", callback_data: "btn_uz_5" },
+          ]
+        ],
+      },
+    });
+    
+  } catch (error) {
+    console.error(error);
+  }
+})
+
 // Связаться
 bot.action("btn_ru_5", async (ctx) => {
   try {
@@ -3830,8 +3825,11 @@ bot.action("btn_ru_5", async (ctx) => {
               text: "Мададкор",
               url: "https://www.facebook.com/madadkor.madadkorov",
             },
-            { text: "⬅️ Назад", callback_data: "btn_ru_12" },
+            {
+              text: "❓ вопросы и ответы", callback_data: "btn_ru_sj"
+            }
           ],
+          [{ text: "⬅️ Назад", callback_data: "btn_ru_12" },]
         ],
       },
     });
@@ -3865,8 +3863,14 @@ bot.action("btn_uz_12", async (ctx) => {
 
           [
             { text: "🏠 Bosh sahifa", callback_data: "btn_uz_3" },
-            { text: "⬅️ Ortga qaytish", callback_data: "btn_uz_4" },
+            {
+              text: "💵 Korrupsiya haqida xabar",
+              callback_data: "btn_uz_cur",
+            }, 
           ],
+          [
+            { text: "⬅️ Ortga qaytish", callback_data: "btn_uz_4" },
+          ]
         ],
       },
     });
@@ -3892,15 +3896,22 @@ bot.action("btn_ru_12", async (ctx) => {
               callback_data: "btn_ru_1-0",
             },
           ],
-
+          
           [
             { text: "☎️ Связаться", callback_data: "btn_ru_5" },
             { text: "👷🏻‍♂️ Для трудовых мигрантов", callback_data: "btn_ru_2" },
           ],
           [
             { text: "🏠 Главная страница", callback_data: "btn_ru_3" },
-            { text: "⬅️ Назад", callback_data: "btn_ru_4" },
+            {
+              text: "💵 Сообщить о коррупции",
+              callback_data: "btn_ru_cur",
+            },
+            
           ],
+          [
+            { text: "⬅️ Назад", callback_data: "btn_ru_4" },
+          ]
         ],
       },
     });
